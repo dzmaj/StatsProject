@@ -1,6 +1,9 @@
 package com.mythstats.scraper;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -67,14 +70,14 @@ public class Parser {
 		tempStr = null;
 		strArr = null;
 		
-//		g.setMesh(gameMesh);
 		game.setMapName(gameMesh);
-//		g.setGameType(gameType);
 		game.setGametype(parseGametype(gameType));
-//		gameStartTimeStr = gameStartTimeStr.replace(' ', 'T');
-//		g.setStartTime(LocalDateTime.parse(gameStartTimeStr));
-//		LocalTime t = LocalTime.parse(gameRealDurationStr);
-//		Duration d = Duration.between(LocalTime.of(0, 0), t);
+		gameStartTimeStr = gameStartTimeStr.replace(' ', 'T');
+		game.setStartDateTime(LocalDateTime.parse(gameStartTimeStr));
+		LocalTime t = LocalTime.parse(gameRealDurationStr);
+		Duration d = Duration.between(LocalTime.of(0, 0), t);
+		LocalDateTime endDateTime = game.getStartDateTime().plusSeconds(d.getSeconds());
+		game.setEndDateTime(endDateTime);
 //		g.setRealDuration(d);
 //		g.setHost(gameHost);
 	}
