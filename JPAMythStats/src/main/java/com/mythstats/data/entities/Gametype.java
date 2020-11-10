@@ -63,4 +63,10 @@ public class Gametype {
 			return false;
 		return true;
 	}
+
+	public Gametype(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 }
