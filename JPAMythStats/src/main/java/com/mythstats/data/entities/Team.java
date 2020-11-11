@@ -56,8 +56,6 @@ public class Team {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Team [id=");
 		builder.append(id);
-		builder.append(", game=");
-		builder.append(game);
 		builder.append(", place=");
 		builder.append(place);
 		builder.append(", placeTie=");
@@ -68,8 +66,6 @@ public class Team {
 		builder.append(eliminated);
 		builder.append(", teamName=");
 		builder.append(teamName);
-		builder.append(", players=");
-		builder.append(players);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -18,6 +18,7 @@ import com.mythstats.data.entities.Game;
 import com.mythstats.data.entities.Gametype;
 import com.mythstats.data.entities.Player;
 import com.mythstats.data.entities.Team;
+import com.mythstats.data.entities.User;
 
 public class Parser {
 
@@ -46,11 +47,13 @@ public class Parser {
 		parseGameMeta1();
 		parseGameMeta2();
 		parseTable();
-		
-		
-		
-		// TODO: teamCount
-		// TODO: playerCount
+		game.setTeamCount(game.getTeams().size());
+		int playerCount = 0;
+		for (Team team : game.getTeams()) {
+			playerCount += team.getPlayers().size();
+		}
+		game.setPlayerCount(playerCount);
+
 		// TODO: gameName
 		// TODO: cooperative (edge case where game is custom gametype but not coop)
 		// TODO: recordingURL
@@ -206,8 +209,6 @@ public class Parser {
 			game.setPlanningTimeLimit(0);
 		}
 
-		
-
 	}
 
 	private void parseTable() {
@@ -220,20 +221,12 @@ public class Parser {
 			Element row = it.next();
 			Element siblingRow = row.nextElementSibling();
 			if (row.html().contains("<td>Spectators</td>")) {
-				break;
+				t = parseSpectatorTeamRow(row);
+				game.addTeam(t);
 			}
-			
-			// Group back together
-			String evenOdd;
-			if (row.hasClass("even")) {
-				evenOdd = "even";
-			} else if (row.hasClass("odd")) {
-				evenOdd = "odd";
-			}
-			
+
 			// is team or not
-			if (row.hasClass("team_header")) {
-				row.attr("team", true);
+			else if (row.hasClass("team_header")) {
 				t = parseTeamRow(row);
 				// if no sibling and this is team, then this is also player
 				if (siblingRow == null) {
@@ -258,64 +251,108 @@ public class Parser {
 				}
 				game.addTeam(t);
 			} else {
-				row.attr("team", false);
-				p = parsePlayerRow(row);
-				if (p != null) {
-					t.addPlayer(p);
+				if (!t.isSpectators()) {
+					p = parsePlayerRow(row);
+					if (p != null) {
+						t.addPlayer(p);
+					}
+				} else {
+					p = parseSpectatorPlayerRow(row);
+					if (p != null) {
+						t.addPlayer(p);
+					}
 				}
 			}
-			
+
 		}
 	}
-	
-	private Player parsePlayerRow(Element row) {
+
+	private Player parseSpectatorPlayerRow(Element row) {
 		Player player = null;
 		
-		player = new Player();
-		
-		Elements tableData = row.getElementsByTag("td");
-		String place = tableData.get(0).text();
-		
-		String name = tableData.get(1).text();
-		player.setNickName(name);
-		String userId = null;
 		try {
-			userId = tableData.get(1).child(0).attr("href");
-			userId = userId.substring(7);
-		} catch (Exception e) {
-			userId = "-1";
-		}
-		// /users/{id}
-//		System.out.println(userId);
-		String killed = tableData.get(2).text();
-		player.setUnitsKilled(Integer.parseInt(killed));
-		String lost = tableData.get(3).text();
-		player.setUnitsLost(Integer.parseInt(lost));
-		String damageGiven = tableData.get(5).text();
-		player.setDamageGiven(Integer.parseInt(damageGiven));
-		String damageTaken = tableData.get(6).text();
-		player.setDamageTaken(Integer.parseInt(damageTaken));
-		
-		String status = tableData.get(8).text();
+			player = new Player();
+			Elements tableData = row.getElementsByTag("td");
 
-		
+			String name = tableData.get(1).text();
+			player.setNickName(name);
+			String userId = null;
+			try {
+				userId = tableData.get(1).child(0).attr("href");
+				userId = userId.substring(7, userId.length() - 1);
+				User user = new User();
+				user.setId(Integer.parseInt(userId));
+				player.setUser(user);
+			} catch (Exception e) {
+				userId = "-1";
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return player;
 	}
-	
+
+	private Player parsePlayerRow(Element row) {
+		Player player = null;
+
+		try {
+			player = new Player();
+
+			Elements tableData = row.getElementsByTag("td");
+			String place = tableData.get(0).text();
+
+			String name = tableData.get(1).text();
+			player.setNickName(name);
+			String userId = null;
+			try {
+				userId = tableData.get(1).child(0).attr("href");
+				userId = userId.substring(7, userId.length() - 1);
+				User user = new User();
+				user.setId(Integer.parseInt(userId));
+				player.setUser(user);
+			} catch (Exception e) {
+				userId = "-1";
+			}
+			String killed = tableData.get(2).text();
+			player.setUnitsKilled(Integer.parseInt(killed));
+			String lost = tableData.get(3).text();
+			player.setUnitsLost(Integer.parseInt(lost));
+			String damageGiven = tableData.get(5).text();
+			player.setDamageGiven(Integer.parseInt(damageGiven));
+			String damageTaken = tableData.get(6).text();
+			player.setDamageTaken(Integer.parseInt(damageTaken));
+
+			String status = tableData.get(8).text();
+			if (status.equals("Dropped")) {
+				player.setDropped(true);
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return player;
+	}
+
+	private Team parseSpectatorTeamRow(Element row) {
+		Team team = new Team();
+		team.setSpectators(true);
+		team.setPlace(-1);
+		return team;
+	}
 
 	private Team parseTeamRow(Element row) {
 		Elements tableData = row.getElementsByTag("td");
 		String place = tableData.get(0).text();
-		
 
-		
 		String status = tableData.get(8).text();
 		String name = tableData.get(1).text();
 //		System.out.println(tableData);
 //		System.out.println(place);
-		
+
 		Team team = new Team();
-		team.setGame(game);
 		team.setTeamName(name);
 		team.setPlace(Integer.parseInt(place));
 		if (status.equals("Eliminated")) {
@@ -323,21 +360,6 @@ public class Parser {
 		}
 		return team;
 	}
-
-//	public StatRow parseRow(Element row) {
-//		
-//		Elements tableData = row.getElementsByTag("td");
-//		String place = tableData.get(0).text();
-//		String name = tableData.get(1).text();
-//		String killed = tableData.get(2).text();
-//		String lost = tableData.get(3).text();
-//		String damageGiven = tableData.get(5).text();
-//		String damageTaken = tableData.get(6).text();
-//		String status = tableData.get(8).text();
-//		StatRow sr = null;
-//		
-//		return sr;
-//	}
 
 	public Difficulty parseDifficulty(String str) {
 		Difficulty dif = null;

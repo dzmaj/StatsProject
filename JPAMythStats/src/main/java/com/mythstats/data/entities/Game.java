@@ -22,7 +22,7 @@ public class Game {
 	private int teamCount;
 	
 	@Column(name = "player_count")
-	private int player_count;
+	private int playerCount;
 	
 	// null
 	@Column(name = "game_name")
@@ -130,8 +130,8 @@ public class Game {
 		builder.append(id);
 		builder.append(", teamCount=");
 		builder.append(teamCount);
-		builder.append(", player_count=");
-		builder.append(player_count);
+		builder.append(", playerCount=");
+		builder.append(playerCount);
 		builder.append(", gameName=");
 		builder.append(gameName);
 		builder.append(", mapName=");
@@ -172,8 +172,6 @@ public class Game {
 		builder.append(duration);
 		builder.append(", recordingURL=");
 		builder.append(recordingURL);
-		builder.append(", teams=");
-		builder.append(teams);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -194,13 +192,6 @@ public class Game {
 		this.teamCount = teamCount;
 	}
 
-	public int getPlayer_count() {
-		return player_count;
-	}
-
-	public void setPlayer_count(int player_count) {
-		this.player_count = player_count;
-	}
 
 	public String getGameName() {
 		return gameName;
@@ -368,6 +359,14 @@ public class Game {
 
 	public void setTeams(List<Team> teams) {
 		this.teams = teams;
+	}
+
+	public int getPlayerCount() {
+		return playerCount;
+	}
+
+	public void setPlayerCount(int playerCount) {
+		this.playerCount = playerCount;
 	}
 	
 }
