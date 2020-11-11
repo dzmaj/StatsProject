@@ -1,7 +1,8 @@
 package com.mythstats.data.entities;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -86,7 +87,7 @@ public class Game {
 	private String recordingURL;
 	
 	@OneToMany(mappedBy = "game")
-	private Set<Team> teams;
+	private List<Team> teams;
 
 	public Game() {
 		super();
@@ -94,7 +95,7 @@ public class Game {
 	
 	public void addTeam(Team team) {
 		if (teams == null) {
-			teams = new HashSet<>();
+			teams = new ArrayList<>();
 		}
 		teams.add(team);
 		team.setGame(this);
@@ -361,11 +362,11 @@ public class Game {
 		this.recordingURL = recordingURL;
 	}
 
-	public Set<Team> getTeams() {
+	public List<Team> getTeams() {
 		return teams;
 	}
 
-	public void setTeams(Set<Team> teams) {
+	public void setTeams(List<Team> teams) {
 		this.teams = teams;
 	}
 	

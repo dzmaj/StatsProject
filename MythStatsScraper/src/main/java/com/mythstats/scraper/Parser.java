@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +16,7 @@ import org.jsoup.select.Elements;
 import com.mythstats.data.entities.Difficulty;
 import com.mythstats.data.entities.Game;
 import com.mythstats.data.entities.Gametype;
+import com.mythstats.data.entities.Player;
 import com.mythstats.data.entities.Team;
 
 public class Parser {
@@ -46,6 +45,15 @@ public class Parser {
 		game.setId(gameId);
 		parseGameMeta1();
 		parseGameMeta2();
+		parseTable();
+		
+		
+		
+		// TODO: teamCount
+		// TODO: playerCount
+		// TODO: gameName
+		// TODO: cooperative (edge case where game is custom gametype but not coop)
+		// TODO: recordingURL
 
 		return game;
 	}
@@ -198,48 +206,122 @@ public class Parser {
 			game.setPlanningTimeLimit(0);
 		}
 
-		// TODO: teamCount
-		// TODO: playerCount
-		// TODO: gameName
-		// TODO: cooperative (edge case where game is custom gametype but not coop)
-		// TODO: recordingURL
+		
 
 	}
 
-	public void parseTable() {
+	private void parseTable() {
 		Element gameTable = content.getElementsByTag("tbody").first();
 		Elements rows = gameTable.children();
 		Iterator<Element> it = rows.iterator();
 		Team t = null;
-		Set<Team> teams = new HashSet<>();
+		Player p = null;
 		while (it.hasNext()) {
 			Element row = it.next();
-			if (row.hasClass("team_header")) {
-				t = new Team();
-				t = parseTeamRow(row);
-				game.addTeam(t);
-
+			Element siblingRow = row.nextElementSibling();
+			if (row.html().contains("<td>Spectators</td>")) {
+				break;
 			}
-//				else {
-//				
-//				t.addPlayer(null);
-//			}
+			
+			// Group back together
+			String evenOdd;
+			if (row.hasClass("even")) {
+				evenOdd = "even";
+			} else if (row.hasClass("odd")) {
+				evenOdd = "odd";
+			}
+			
+			// is team or not
+			if (row.hasClass("team_header")) {
+				row.attr("team", true);
+				t = parseTeamRow(row);
+				// if no sibling and this is team, then this is also player
+				if (siblingRow == null) {
+					p = parsePlayerRow(row);
+					if (p != null) {
+						t.addPlayer(p);
+					}
+				}
+				// if sibling is team and this is team, then this is also player
+				else if (siblingRow.hasClass("team_header")) {
+					p = parsePlayerRow(row);
+					if (p != null) {
+						t.addPlayer(p);
+					}
+				}
+				// if sibling is spectator row and this is team, then this is also player
+				else if (siblingRow.html().contains("<td>Spectators</td>")) {
+					p = parsePlayerRow(row);
+					if (p != null) {
+						t.addPlayer(p);
+					}
+				}
+				game.addTeam(t);
+			} else {
+				row.attr("team", false);
+				p = parsePlayerRow(row);
+				if (p != null) {
+					t.addPlayer(p);
+				}
+			}
+			
 		}
 	}
+	
+	private Player parsePlayerRow(Element row) {
+		Player player = null;
+		
+		player = new Player();
+		
+		Elements tableData = row.getElementsByTag("td");
+		String place = tableData.get(0).text();
+		
+		String name = tableData.get(1).text();
+		player.setNickName(name);
+		String userId = null;
+		try {
+			userId = tableData.get(1).child(0).attr("href");
+			userId = userId.substring(7);
+		} catch (Exception e) {
+			userId = "-1";
+		}
+		// /users/{id}
+//		System.out.println(userId);
+		String killed = tableData.get(2).text();
+		player.setUnitsKilled(Integer.parseInt(killed));
+		String lost = tableData.get(3).text();
+		player.setUnitsLost(Integer.parseInt(lost));
+		String damageGiven = tableData.get(5).text();
+		player.setDamageGiven(Integer.parseInt(damageGiven));
+		String damageTaken = tableData.get(6).text();
+		player.setDamageTaken(Integer.parseInt(damageTaken));
+		
+		String status = tableData.get(8).text();
+
+		
+		return player;
+	}
+	
 
 	private Team parseTeamRow(Element row) {
 		Elements tableData = row.getElementsByTag("td");
 		String place = tableData.get(0).text();
 		
-		String name = tableData.get(1).text();
+
 		
-		String killed = tableData.get(2).text();
-		String lost = tableData.get(3).text();
-		String damageGiven = tableData.get(5).text();
-		String damageTaken = tableData.get(6).text();
 		String status = tableData.get(8).text();
+		String name = tableData.get(1).text();
+//		System.out.println(tableData);
+//		System.out.println(place);
 		
-		return null;
+		Team team = new Team();
+		team.setGame(game);
+		team.setTeamName(name);
+		team.setPlace(Integer.parseInt(place));
+		if (status.equals("Eliminated")) {
+			team.setEliminated(true);
+		}
+		return team;
 	}
 
 //	public StatRow parseRow(Element row) {

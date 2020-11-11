@@ -14,7 +14,7 @@ import com.mythstats.data.entities.Game;
 
 class ParserTest {
 	private Parser parser;
-	private Game game1;
+	private Game game;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -27,23 +27,51 @@ class ParserTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		parser = new Parser();
-		parser.parse(1);
-		game1 = parser.getGame();
+		
 	}
 
 	@AfterEach
 	void tearDown() throws Exception {
 		parser = null;
-		game1 = null;
+		game = null;
 	}
 
 	@Test
 	@DisplayName("test parse game entity")
-	void test() {
-		assertNotNull(game1);
-		assertEquals(1, game1.getId());
-		assertEquals("I'll Fall On Your Grave", game1.getMapName());
-		System.out.println(game1);
+	void game1Test1() {
+		parser.parse(1);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertEquals(1, game.getId());
+		assertEquals("I'll Fall On Your Grave", game.getMapName());
+	}
+	@Test
+	@DisplayName("test parse game teams")
+	void game1Test2() {
+		parser.parse(1);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertNotNull(game.getTeams());
+		assertEquals(4, game.getTeams().size());
+	}
+	
+	@Test
+	@DisplayName("test parse game entity")
+	void game298186Test1() {
+		parser.parse(298186);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertEquals(298186, game.getId());
+		assertEquals("Killing Grounds", game.getMapName());
+	}
+	@Test
+	@DisplayName("test parse game teams")
+	void game298186Test2() {
+		parser.parse(298186);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertNotNull(game.getTeams());
+		assertEquals(2, game.getTeams().size());
 	}
 
 }
