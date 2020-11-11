@@ -1,6 +1,7 @@
 package com.mythstats.data.entities;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class Team {
 	private String teamName;
 	
 	@OneToMany(mappedBy = "team")
-	private Set<Player> players;
+	private List<Player> players;
 
 	public Team() {
 		super();
@@ -44,7 +45,7 @@ public class Team {
 	
 	public void addPlayer(Player player) {
 		if (players == null) {
-			players = new HashSet<>();
+			players = new ArrayList<>();
 		}
 		players.add(player);
 		player.setTeam(this);
@@ -55,8 +56,6 @@ public class Team {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Team [id=");
 		builder.append(id);
-		builder.append(", game=");
-		builder.append(game);
 		builder.append(", place=");
 		builder.append(place);
 		builder.append(", placeTie=");
@@ -67,8 +66,6 @@ public class Team {
 		builder.append(eliminated);
 		builder.append(", teamName=");
 		builder.append(teamName);
-		builder.append(", players=");
-		builder.append(players);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -151,11 +148,11 @@ public class Team {
 		this.teamName = teamName;
 	}
 
-	public Set<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(Set<Player> players) {
+	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
 

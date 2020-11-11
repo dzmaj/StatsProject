@@ -1,7 +1,8 @@
 package com.mythstats.data.entities;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ public class Game {
 	private int teamCount;
 	
 	@Column(name = "player_count")
-	private int player_count;
+	private int playerCount;
 	
 	// null
 	@Column(name = "game_name")
@@ -86,7 +87,7 @@ public class Game {
 	private String recordingURL;
 	
 	@OneToMany(mappedBy = "game")
-	private Set<Team> teams;
+	private List<Team> teams;
 
 	public Game() {
 		super();
@@ -94,7 +95,7 @@ public class Game {
 	
 	public void addTeam(Team team) {
 		if (teams == null) {
-			teams = new HashSet<>();
+			teams = new ArrayList<>();
 		}
 		teams.add(team);
 		team.setGame(this);
@@ -129,8 +130,8 @@ public class Game {
 		builder.append(id);
 		builder.append(", teamCount=");
 		builder.append(teamCount);
-		builder.append(", player_count=");
-		builder.append(player_count);
+		builder.append(", playerCount=");
+		builder.append(playerCount);
 		builder.append(", gameName=");
 		builder.append(gameName);
 		builder.append(", mapName=");
@@ -171,8 +172,6 @@ public class Game {
 		builder.append(duration);
 		builder.append(", recordingURL=");
 		builder.append(recordingURL);
-		builder.append(", teams=");
-		builder.append(teams);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -193,13 +192,6 @@ public class Game {
 		this.teamCount = teamCount;
 	}
 
-	public int getPlayer_count() {
-		return player_count;
-	}
-
-	public void setPlayer_count(int player_count) {
-		this.player_count = player_count;
-	}
 
 	public String getGameName() {
 		return gameName;
@@ -361,12 +353,20 @@ public class Game {
 		this.recordingURL = recordingURL;
 	}
 
-	public Set<Team> getTeams() {
+	public List<Team> getTeams() {
 		return teams;
 	}
 
-	public void setTeams(Set<Team> teams) {
+	public void setTeams(List<Team> teams) {
 		this.teams = teams;
+	}
+
+	public int getPlayerCount() {
+		return playerCount;
+	}
+
+	public void setPlayerCount(int playerCount) {
+		this.playerCount = playerCount;
 	}
 	
 }
