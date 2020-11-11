@@ -4,24 +4,29 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.mythstats.data.entities.Difficulty;
 import com.mythstats.data.entities.Game;
 import com.mythstats.data.entities.Gametype;
+import com.mythstats.data.entities.Team;
 
 public class Parser {
-	
+
 	private static final String URL_BASE = "http://gateofstorms.net/games/";
 	private Element content;
 	private Game game;
 	private String gameHostNameStr;
-	
+
 	public Game parse(int gameId) {
 		game = null;
 		String url = URL_BASE + gameId;
@@ -41,7 +46,7 @@ public class Parser {
 		game.setId(gameId);
 		parseGameMeta1();
 		parseGameMeta2();
-		
+
 		return game;
 	}
 
@@ -54,18 +59,15 @@ public class Parser {
 		if (tempStr.contains("Last Man on the Hill")) {
 			gameType = "Last Man on the Hill";
 			gameMesh = tempStr.substring(24);
-		}
-		else if (tempStr.contains("Balls on Parade")){
+		} else if (tempStr.contains("Balls on Parade")) {
 			gameType = "Balls on Parade";
 			gameMesh = tempStr.substring(19);
-		}
-		else {
+		} else {
 			strArr = tempStr.split(" on ", 2);
 			gameType = strArr[0];
 			gameMesh = strArr[1];
 		}
 
-		
 		tempStr = metaPart1.selectFirst("p").html().replaceAll("<p>", "");
 		strArr = tempStr.split("<br> Began at ");
 		gameHostNameStr = strArr[0].replaceAll("Hosted by ", "");
@@ -73,7 +75,7 @@ public class Parser {
 		String gameRealDurationStr = strArr[1].split(" and lasted for ")[1];
 		tempStr = null;
 		strArr = null;
-		
+
 		game.setMapName(gameMesh);
 		game.setGametype(parseGametype(gameType));
 		gameStartTimeStr = gameStartTimeStr.replace(' ', 'T');
@@ -82,8 +84,9 @@ public class Parser {
 		Duration d = Duration.between(LocalTime.of(0, 0), t);
 		LocalDateTime endDateTime = game.getStartDateTime().plusSeconds(d.getSeconds());
 		game.setEndDateTime(endDateTime);
+		game.setDuration((int) d.getSeconds());
 	}
-	
+
 	private Gametype parseGametype(String gameType) {
 		Gametype gametype = null;
 		switch (gameType) {
@@ -150,7 +153,7 @@ public class Parser {
 		System.out.println(settingsStr);
 		String regex = "(\\d{2}:\\d{2}:\\d{2})";
 		Pattern p = Pattern.compile(regex);
-	    Matcher m = p.matcher(settingsStr);
+		Matcher m = p.matcher(settingsStr);
 		if (settingsStr.contains("Unit Trading Enabled")) {
 			game.setAllowUnitTrading(true);
 		}
@@ -195,28 +198,52 @@ public class Parser {
 		} else {
 			game.setPlanningTimeLimit(0);
 		}
+
+		// TODO: teamCount
+		// TODO: playerCount
+		// TODO: gameName
+		// TODO: cooperative (edge case where game is custom gametype but not coop)
+		// TODO: recordingURL
+
 	}
-	
-	
-	
-//	public void parseTable() {
-//		Element gameTable = content.getElementsByTag("tbody").first();
-//		Elements rows = gameTable.children();
-//		Iterator<Element> it = rows.iterator();
-//		Team t = null;
-//		List<Team> tl = new ArrayList<>();
-//		while(it.hasNext()) {
-//			Element row = it.next();
-//			if (row.hasClass("team_header")) {
-//				t = new Team();
-//				tl.add(t);
-//			} else {
+
+	public void parseTable() {
+		Element gameTable = content.getElementsByTag("tbody").first();
+		Elements rows = gameTable.children();
+		Iterator<Element> it = rows.iterator();
+		Team t = null;
+		Set<Team> teams = new HashSet<>();
+		while (it.hasNext()) {
+			Element row = it.next();
+			if (row.hasClass("team_header")) {
+				t = new Team();
+				t = parseTeamRow(row);
+				game.addTeam(t);
+
+			}
+//				else {
 //				
 //				t.addPlayer(null);
 //			}
-//		}
-//	}
-	
+		}
+//		game.setTeams(teams);
+	}
+
+	private Team parseTeamRow(Element row) {
+		Elements tableData = row.getElementsByTag("td");
+		String place = tableData.get(0).text();
+		
+		String name = tableData.get(1).text();
+		
+		String killed = tableData.get(2).text();
+		String lost = tableData.get(3).text();
+		String damageGiven = tableData.get(5).text();
+		String damageTaken = tableData.get(6).text();
+		String status = tableData.get(8).text();
+		
+		return null;
+	}
+
 //	public StatRow parseRow(Element row) {
 //		
 //		Elements tableData = row.getElementsByTag("td");
@@ -231,19 +258,16 @@ public class Parser {
 //		
 //		return sr;
 //	}
-	
+
 	public Difficulty parseDifficulty(String str) {
 		Difficulty dif = null;
 		if (str.contains("Timid")) {
 			dif = new Difficulty(0, "Timid");
-		}
-		else if (str.contains("Simple")) {
+		} else if (str.contains("Simple")) {
 			dif = new Difficulty(1, "Simple");
-		}
-		else if (str.contains("Heroic")) {
+		} else if (str.contains("Heroic")) {
 			dif = new Difficulty(3, "Heroic");
-		}
-		else if (str.contains("Legendary")) {
+		} else if (str.contains("Legendary")) {
 			dif = new Difficulty(4, "Legendary");
 		} else {
 			dif = new Difficulty(2, "Normal");

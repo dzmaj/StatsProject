@@ -1,6 +1,7 @@
 package com.mythstats.data.entities;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -89,6 +90,14 @@ public class Game {
 
 	public Game() {
 		super();
+	}
+	
+	public void addTeam(Team team) {
+		if (teams == null) {
+			teams = new HashSet<>();
+		}
+		teams.add(team);
+		team.setGame(this);
 	}
 
 	@Override

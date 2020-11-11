@@ -1,5 +1,6 @@
 package com.mythstats.data.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -39,6 +40,14 @@ public class Team {
 
 	public Team() {
 		super();
+	}
+	
+	public void addPlayer(Player player) {
+		if (players == null) {
+			players = new HashSet<>();
+		}
+		players.add(player);
+		player.setTeam(this);
 	}
 
 	@Override
