@@ -1,6 +1,7 @@
 package com.mythstats.data.entities;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ public class Game {
 	@Column(name = "player_count")
 	private int player_count;
 	
+	// null
 	@Column(name = "game_name")
 	private String gameName;
 	
@@ -43,6 +45,7 @@ public class Game {
 	@Column(name = "planning_time_limit")
 	private Integer planningTimeLimit;
 	
+	// TODO: coop logic
 	private boolean cooperative;
 	
 	@Column(name = "allow_teams")
@@ -87,6 +90,14 @@ public class Game {
 
 	public Game() {
 		super();
+	}
+	
+	public void addTeam(Team team) {
+		if (teams == null) {
+			teams = new HashSet<>();
+		}
+		teams.add(team);
+		team.setGame(this);
 	}
 
 	@Override
