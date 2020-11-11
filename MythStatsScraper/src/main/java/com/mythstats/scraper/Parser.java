@@ -150,7 +150,6 @@ public class Parser {
 		LocalTime t;
 		Element metaPart2 = content.getElementsByClass("medium-3").first().child(1);
 		settingsStr = metaPart2.html();
-		System.out.println(settingsStr);
 		String regex = "(\\d{2}:\\d{2}:\\d{2})";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(settingsStr);
@@ -226,7 +225,6 @@ public class Parser {
 //				t.addPlayer(null);
 //			}
 		}
-//		game.setTeams(teams);
 	}
 
 	private Team parseTeamRow(Element row) {
@@ -273,6 +271,14 @@ public class Parser {
 			dif = new Difficulty(2, "Normal");
 		}
 		return dif;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
 	}
 
 }
