@@ -22,6 +22,7 @@ public class Game {
 	@Column(name = "player_count")
 	private int player_count;
 	
+	// null
 	@Column(name = "game_name")
 	private String gameName;
 	
@@ -43,6 +44,7 @@ public class Game {
 	@Column(name = "planning_time_limit")
 	private Integer planningTimeLimit;
 	
+	// TODO: coop logic
 	private boolean cooperative;
 	
 	@Column(name = "allow_teams")

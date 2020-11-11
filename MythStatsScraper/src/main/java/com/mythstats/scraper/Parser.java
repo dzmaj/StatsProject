@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,6 +20,7 @@ public class Parser {
 	private static final String URL_BASE = "http://gateofstorms.net/games/";
 	private Element content;
 	private Game game;
+	private String gameHostNameStr;
 	
 	public Game parse(int gameId) {
 		game = null;
@@ -65,7 +68,7 @@ public class Parser {
 		
 		tempStr = metaPart1.selectFirst("p").html().replaceAll("<p>", "");
 		strArr = tempStr.split("<br> Began at ");
-		String gameHost = strArr[0].replaceAll("Hosted by ", "");
+		gameHostNameStr = strArr[0].replaceAll("Hosted by ", "");
 		String gameStartTimeStr = strArr[1].split(" and lasted for ")[0];
 		String gameRealDurationStr = strArr[1].split(" and lasted for ")[1];
 		tempStr = null;
@@ -79,7 +82,6 @@ public class Parser {
 		Duration d = Duration.between(LocalTime.of(0, 0), t);
 		LocalDateTime endDateTime = game.getStartDateTime().plusSeconds(d.getSeconds());
 		game.setEndDateTime(endDateTime);
-//		g.setHost(gameHost);
 	}
 	
 	private Gametype parseGametype(String gameType) {
@@ -147,34 +149,52 @@ public class Parser {
 		settingsStr = metaPart2.html();
 		System.out.println(settingsStr);
 		String regex = "(\\d{2}:\\d{2}:\\d{2})";
-//		Pattern p = Pattern.compile(regex);
-//	    Matcher m = p.matcher(settingsStr);
-//		if (settingsStr.contains("Unit Trading Enabled")) {
-//			g.setTradingEnabled(true);
-//		}
-//		if (!settingsStr.contains("No Alliances")) {
-//			g.setAlliesAllowed(true);
-//		}
-//		if (settingsStr.contains("Teams Allowed")) {
-//			g.setTeamsAllowed(true);
-//		}
-//		if (settingsStr.contains("Veterans Allowed")) {
-//			g.setVeteransAllowed(true);
-//		}
-//		g.setDifficulty(parseDifficulty(settingsStr));
-//		m.reset(settingsStr);
-//		if (settingsStr.contains("Time Limit")) {
-//			m.find();
-//			t = LocalTime.parse(m.group(1));
-//			d = Duration.between(LocalTime.of(0, 0), t);
-//			g.setGameTime(d);
-//		}
-//		if (settingsStr.contains("Planning Time")) {
-//			m.find();
-//			t = LocalTime.parse(m.group(1));
-//			d = Duration.between(LocalTime.of(0, 0), t);
-//			g.setPlanningTime(d);
-//		}
+		Pattern p = Pattern.compile(regex);
+	    Matcher m = p.matcher(settingsStr);
+		if (settingsStr.contains("Unit Trading Enabled")) {
+			game.setAllowUnitTrading(true);
+		}
+		if (!settingsStr.contains("No Alliances")) {
+			game.setAllowAlliances(true);
+		}
+		if (settingsStr.contains("Teams Allowed")) {
+			game.setAllowTeams(true);
+		}
+		if (settingsStr.contains("Veterans Allowed")) {
+			game.setAllowVeterans(true);
+		}
+		if (settingsStr.contains("Overhead")) {
+			game.setOverheadMap(false);
+		} else {
+			game.setOverheadMap(true);
+		}
+		if (settingsStr.contains("vTFL")) {
+			game.setvTFL(true);
+		}
+		if (settingsStr.contains("Clump")) {
+			game.setAntiClump(true);
+		}
+		if (settingsStr.contains("Deathmatch")) {
+			game.setDeathmatch(true);
+		}
+		game.setDifficulty(parseDifficulty(settingsStr));
+		m.reset(settingsStr);
+		if (settingsStr.contains("Time Limit")) {
+			m.find();
+			t = LocalTime.parse(m.group(1));
+			d = Duration.between(LocalTime.of(0, 0), t);
+			game.setTimeLimit((int) d.getSeconds());
+		} else {
+			game.setTimeLimit(-1);
+		}
+		if (settingsStr.contains("Planning Time")) {
+			m.find();
+			t = LocalTime.parse(m.group(1));
+			d = Duration.between(LocalTime.of(0, 0), t);
+			game.setPlanningTimeLimit((int) d.getSeconds());
+		} else {
+			game.setPlanningTimeLimit(0);
+		}
 	}
 	
 	
