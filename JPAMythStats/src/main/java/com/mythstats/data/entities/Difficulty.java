@@ -69,5 +69,11 @@ public class Difficulty {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Difficulty(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 	
 }

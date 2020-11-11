@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import com.mythstats.data.entities.Difficulty;
 import com.mythstats.data.entities.Game;
 import com.mythstats.data.entities.Gametype;
 
@@ -78,7 +79,6 @@ public class Parser {
 		Duration d = Duration.between(LocalTime.of(0, 0), t);
 		LocalDateTime endDateTime = game.getStartDateTime().plusSeconds(d.getSeconds());
 		game.setEndDateTime(endDateTime);
-//		g.setRealDuration(d);
 //		g.setHost(gameHost);
 	}
 	
@@ -140,8 +140,95 @@ public class Parser {
 	}
 
 	private void parseGameMeta2() {
-		
+		String settingsStr;
+		Duration d;
+		LocalTime t;
+		Element metaPart2 = content.getElementsByClass("medium-3").first().child(1);
+		settingsStr = metaPart2.html();
+		System.out.println(settingsStr);
+		String regex = "(\\d{2}:\\d{2}:\\d{2})";
+//		Pattern p = Pattern.compile(regex);
+//	    Matcher m = p.matcher(settingsStr);
+//		if (settingsStr.contains("Unit Trading Enabled")) {
+//			g.setTradingEnabled(true);
+//		}
+//		if (!settingsStr.contains("No Alliances")) {
+//			g.setAlliesAllowed(true);
+//		}
+//		if (settingsStr.contains("Teams Allowed")) {
+//			g.setTeamsAllowed(true);
+//		}
+//		if (settingsStr.contains("Veterans Allowed")) {
+//			g.setVeteransAllowed(true);
+//		}
+//		g.setDifficulty(parseDifficulty(settingsStr));
+//		m.reset(settingsStr);
+//		if (settingsStr.contains("Time Limit")) {
+//			m.find();
+//			t = LocalTime.parse(m.group(1));
+//			d = Duration.between(LocalTime.of(0, 0), t);
+//			g.setGameTime(d);
+//		}
+//		if (settingsStr.contains("Planning Time")) {
+//			m.find();
+//			t = LocalTime.parse(m.group(1));
+//			d = Duration.between(LocalTime.of(0, 0), t);
+//			g.setPlanningTime(d);
+//		}
 	}
 	
+	
+	
+//	public void parseTable() {
+//		Element gameTable = content.getElementsByTag("tbody").first();
+//		Elements rows = gameTable.children();
+//		Iterator<Element> it = rows.iterator();
+//		Team t = null;
+//		List<Team> tl = new ArrayList<>();
+//		while(it.hasNext()) {
+//			Element row = it.next();
+//			if (row.hasClass("team_header")) {
+//				t = new Team();
+//				tl.add(t);
+//			} else {
+//				
+//				t.addPlayer(null);
+//			}
+//		}
+//	}
+	
+//	public StatRow parseRow(Element row) {
+//		
+//		Elements tableData = row.getElementsByTag("td");
+//		String place = tableData.get(0).text();
+//		String name = tableData.get(1).text();
+//		String killed = tableData.get(2).text();
+//		String lost = tableData.get(3).text();
+//		String damageGiven = tableData.get(5).text();
+//		String damageTaken = tableData.get(6).text();
+//		String status = tableData.get(8).text();
+//		StatRow sr = null;
+//		
+//		return sr;
+//	}
+	
+	public Difficulty parseDifficulty(String str) {
+		Difficulty dif = null;
+		if (str.contains("Timid")) {
+			dif = new Difficulty(0, "Timid");
+		}
+		else if (str.contains("Simple")) {
+			dif = new Difficulty(1, "Simple");
+		}
+		else if (str.contains("Heroic")) {
+			dif = new Difficulty(3, "Heroic");
+		}
+		else if (str.contains("Legendary")) {
+			dif = new Difficulty(4, "Legendary");
+		} else {
+			dif = new Difficulty(2, "Normal");
+		}
+		return dif;
+	}
 
 }
