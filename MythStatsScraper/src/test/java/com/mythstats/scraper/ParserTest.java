@@ -74,6 +74,26 @@ class ParserTest {
 		assertNotNull(game);
 		assertNotNull(game.getTeams());
 		assertEquals(3, game.getTeams().size());
+	}
+	
+	@Test
+	@DisplayName("test parse game entity")
+	void game306144Test1() {
+		parser.parse(306144);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertEquals(306144, game.getId());
+		assertEquals("Raisin Barn |i(Light)", game.getMapName());
+		assertEquals("Territories", game.getGametype().getName());
+	}
+	@Test
+	@DisplayName("test parse game teams")
+	void game306144Test2() {
+		parser.parse(306144);
+		game = parser.getGame();
+		assertNotNull(game);
+		assertNotNull(game.getTeams());
+		assertEquals(2, game.getTeams().size());
 		System.out.println(game);
 		for (Team t : game.getTeams()) {
 			System.out.println(t);
@@ -82,5 +102,6 @@ class ParserTest {
 			}
 		}
 	}
+	
 
 }
