@@ -57,6 +57,7 @@ public class Parser {
 		int playerCount = 0;
 		for (Team team : game.getTeams()) {
 			playerCount += team.getPlayers().size();
+			team.getPlayers().get(0).setCaptain(true);
 		}
 		game.setPlayerCount(playerCount);
 
@@ -367,7 +368,7 @@ public class Parser {
 		return team;
 	}
 
-	public Difficulty parseDifficulty(String str) {
+	private Difficulty parseDifficulty(String str) {
 		Difficulty dif = null;
 		if (str.contains("Timid")) {
 			dif = new Difficulty(0, "Timid");
