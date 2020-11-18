@@ -89,7 +89,7 @@ public class Game {
 	@Column(name = "recording_url")
 	private String recordingURL;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy = "game")
 	private List<Team> teams;
 	

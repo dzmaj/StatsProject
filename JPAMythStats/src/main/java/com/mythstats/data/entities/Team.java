@@ -42,7 +42,7 @@ public class Team {
 	@Column(name = "team_name")
 	private String teamName;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy = "team")
 	private List<Player> players;
 	

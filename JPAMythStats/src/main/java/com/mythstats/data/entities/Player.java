@@ -24,7 +24,7 @@ public class Player {
 	@JoinColumn(name = "team_id")
 	private Team team;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
