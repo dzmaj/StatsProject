@@ -1,5 +1,8 @@
 package com.mythstats.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,5 +49,24 @@ public class TestController {
 		return game;
 	}
 	
+	@GetMapping("gos/list/{start}/{end}")
+	public List<Game> getOrParseRange(@PathVariable Integer start, @PathVariable Integer end) {
+		List<Game> games = new ArrayList();
+		for (int i = start; i <= end; i++) {
+			Game game = null;
+			game = gameSvc.find(i);
+			if (game == null) {
+				parser = new Parser();
+				game = parser.parse(i);
+				if (game != null) {
+					game = gameSvc.createFromGoS(game);
+				}
+			}
+			if (game != null) {
+				games.add(game);
+			} 
+		}
+		return games;
+	}
 	
 }
