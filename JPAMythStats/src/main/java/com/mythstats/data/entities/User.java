@@ -1,10 +1,12 @@
 package com.mythstats.data.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -34,6 +36,9 @@ public class User {
 	
 	@Column(name = "last_login_datetime")
 	private LocalDateTime lastLoginDateTime;
+	
+	@ManyToMany(mappedBy = "metaserverUsers")
+	private List<TournamentTeam> tournamentTeams;
 
 	public User() {
 		super();
@@ -146,5 +151,13 @@ public class User {
 
 	public void setLastLoginDateTime(LocalDateTime lastLoginDateTime) {
 		this.lastLoginDateTime = lastLoginDateTime;
+	}
+
+	public List<TournamentTeam> getTournamentTeams() {
+		return tournamentTeams;
+	}
+
+	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+		this.tournamentTeams = tournamentTeams;
 	}
 }
