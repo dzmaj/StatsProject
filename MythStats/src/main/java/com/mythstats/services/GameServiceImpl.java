@@ -85,8 +85,13 @@ public class GameServiceImpl implements GameService {
 				Player player = players.get(i);
 				User user = player.getUser();
 				if (user != null) {
-					user = userRepo.saveAndFlush(user);
-					player.setUser(user);
+					Optional<User> userOpt = userRepo.findById(user.getId());
+					if (userOpt.isPresent()) {
+						player.setUser(userOpt.get());
+					} else {
+						user = userRepo.saveAndFlush(user);
+						player.setUser(user);
+					}
 				}
 				dbTeam.addPlayer(player);
 				Player dbplayer = playerRepo.saveAndFlush(player);
