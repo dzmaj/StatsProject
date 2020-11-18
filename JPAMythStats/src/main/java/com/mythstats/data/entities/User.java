@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "metaserver_user")
 public class User {
@@ -37,6 +39,7 @@ public class User {
 	@Column(name = "last_login_datetime")
 	private LocalDateTime lastLoginDateTime;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "metaserverUsers")
 	private List<TournamentTeam> tournamentTeams;
 

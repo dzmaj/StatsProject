@@ -3,6 +3,7 @@ package com.mythstats.data.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "game_team")
 public class Team {
@@ -22,6 +25,7 @@ public class Team {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "game_id")
 	private Game game;
@@ -38,9 +42,11 @@ public class Team {
 	@Column(name = "team_name")
 	private String teamName;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "team")
 	private List<Player> players;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "gameTeams")
 	private List<TournamentTeam> tournamentTeams;
 

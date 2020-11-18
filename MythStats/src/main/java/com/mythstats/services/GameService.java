@@ -10,4 +10,5 @@ public interface GameService {
 	Game create(Game game);
 	Game update(Game game, int id);
 	Boolean delete(int id);
+	Game createFromGoS(Game game);
 }

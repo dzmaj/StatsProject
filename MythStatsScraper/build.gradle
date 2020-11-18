@@ -30,6 +30,7 @@ ext {
 // define project specific dependencies
 dependencies {
 	compile project(':JPAMythStats')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
 	
 	// jsoup HTML parser library @ https://jsoup.org/
 	compile 'org.jsoup:jsoup:1.13.1'
