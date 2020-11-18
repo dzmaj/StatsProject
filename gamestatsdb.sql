@@ -85,11 +85,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `team`
+-- Table `game_team`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `team` ;
+DROP TABLE IF EXISTS `game_team` ;
 
-CREATE TABLE IF NOT EXISTS `team` (
+CREATE TABLE IF NOT EXISTS `game_team` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `game_id` INT(11) NOT NULL,
   `place` TINYINT(4) NOT NULL,
@@ -107,11 +107,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `user`
+-- Table `metaserver_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `user` ;
+DROP TABLE IF EXISTS `metaserver_user` ;
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `metaserver_user` (
   `id` INT(11) NOT NULL,
   `nick_name` VARCHAR(32) NULL,
   `team_name` VARCHAR(32) NULL,
@@ -126,11 +126,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `player`
+-- Table `game_player`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `player` ;
+DROP TABLE IF EXISTS `game_player` ;
 
-CREATE TABLE IF NOT EXISTS `player` (
+CREATE TABLE IF NOT EXISTS `game_player` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `team_id` INT(11) NOT NULL,
   `user_id` INT(11) NULL DEFAULT NULL,
@@ -154,10 +154,137 @@ CREATE TABLE IF NOT EXISTS `player` (
   INDEX `user_id` (`user_id` ASC),
   CONSTRAINT `metaserver_games_teams_players_ibfk_1`
     FOREIGN KEY (`team_id`)
-    REFERENCES `team` (`id`),
+    REFERENCES `game_team` (`id`),
   CONSTRAINT `metaserver_games_teams_players_ibfk_2`
     FOREIGN KEY (`user_id`)
-    REFERENCES `user` (`id`))
+    REFERENCES `metaserver_user` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tournament`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament` ;
+
+CREATE TABLE IF NOT EXISTS `tournament` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL,
+  `description` VARCHAR(5000) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tournament_match`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament_match` ;
+
+CREATE TABLE IF NOT EXISTS `tournament_match` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL,
+  `description` VARCHAR(5000) NULL,
+  `tournament_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tournament_match_tournament1_idx` (`tournament_id` ASC),
+  CONSTRAINT `fk_tournament_match_tournament1`
+    FOREIGN KEY (`tournament_id`)
+    REFERENCES `tournament` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tournament_team`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament_team` ;
+
+CREATE TABLE IF NOT EXISTS `tournament_team` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL,
+  `description` VARCHAR(5000) NULL,
+  `tournament_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tournament_team_tournament1_idx` (`tournament_id` ASC),
+  CONSTRAINT `fk_tournament_team_tournament1`
+    FOREIGN KEY (`tournament_id`)
+    REFERENCES `tournament` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tournament_match_to_game`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament_match_to_game` ;
+
+CREATE TABLE IF NOT EXISTS `tournament_match_to_game` (
+  `tournament_match_id` INT NOT NULL,
+  `game_id` INT(11) NOT NULL,
+  PRIMARY KEY (`tournament_match_id`, `game_id`),
+  INDEX `fk_tournament_match_has_game_game1_idx` (`game_id` ASC),
+  INDEX `fk_tournament_match_has_game_tournament_match1_idx` (`tournament_match_id` ASC),
+  CONSTRAINT `fk_tournament_match_has_game_tournament_match1`
+    FOREIGN KEY (`tournament_match_id`)
+    REFERENCES `tournament_match` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tournament_match_has_game_game1`
+    FOREIGN KEY (`game_id`)
+    REFERENCES `game` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `game_team_to_tournament_team`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `game_team_to_tournament_team` ;
+
+CREATE TABLE IF NOT EXISTS `game_team_to_tournament_team` (
+  `team_id` INT(11) NOT NULL,
+  `tournament_team_id` INT NOT NULL,
+  PRIMARY KEY (`team_id`, `tournament_team_id`),
+  INDEX `fk_team_has_tournament_team_tournament_team1_idx` (`tournament_team_id` ASC),
+  INDEX `fk_team_has_tournament_team_team1_idx` (`team_id` ASC),
+  CONSTRAINT `fk_team_has_tournament_team_team1`
+    FOREIGN KEY (`team_id`)
+    REFERENCES `game_team` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_team_has_tournament_team_tournament_team1`
+    FOREIGN KEY (`tournament_team_id`)
+    REFERENCES `tournament_team` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `metaserver_user_to_tournament_team`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `metaserver_user_to_tournament_team` ;
+
+CREATE TABLE IF NOT EXISTS `metaserver_user_to_tournament_team` (
+  `metaserver_user_id` INT(11) NOT NULL,
+  `tournament_team_id` INT NOT NULL,
+  PRIMARY KEY (`metaserver_user_id`, `tournament_team_id`),
+  INDEX `fk_metaserver_user_has_tournament_team_tournament_team1_idx` (`tournament_team_id` ASC),
+  INDEX `fk_metaserver_user_has_tournament_team_metaserver_user1_idx` (`metaserver_user_id` ASC),
+  CONSTRAINT `fk_metaserver_user_has_tournament_team_metaserver_user1`
+    FOREIGN KEY (`metaserver_user_id`)
+    REFERENCES `metaserver_user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_metaserver_user_has_tournament_team_tournament_team1`
+    FOREIGN KEY (`tournament_team_id`)
+    REFERENCES `tournament_team` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
