@@ -2,8 +2,11 @@ package com.mythstats.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mythstats.data.entities.TournamentMatch;
 
+@Service
 public class TournamentMatchServiceImpl implements TournamentMatchService {
 
 	@Override
