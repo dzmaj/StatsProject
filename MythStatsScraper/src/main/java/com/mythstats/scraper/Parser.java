@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,13 +27,18 @@ public class Parser {
 	private Element content;
 	private Game game;
 	private String gameHostNameStr;
+	private Connection conn;
 
 	public Game parse(int gameId) {
 		game = null;
 		String url = URL_BASE + gameId;
 		Document doc;
 		try {
-			doc = Jsoup.connect(url).get();
+			conn = Jsoup.connect(url);
+			if (conn.response().statusCode() == 404) {
+				return null;
+			}
+			doc = conn.get();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
