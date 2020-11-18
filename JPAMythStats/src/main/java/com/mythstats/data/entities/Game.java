@@ -3,12 +3,12 @@ package com.mythstats.data.entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -88,6 +88,9 @@ public class Game {
 	
 	@OneToMany(mappedBy = "game")
 	private List<Team> teams;
+	
+	@ManyToMany(mappedBy = "games")
+	private List<TournamentMatch> tournamentMatches;
 
 	public Game() {
 		super();
@@ -367,6 +370,14 @@ public class Game {
 
 	public void setPlayerCount(int playerCount) {
 		this.playerCount = playerCount;
+	}
+
+	public List<TournamentMatch> getTournamentMatches() {
+		return tournamentMatches;
+	}
+
+	public void setTournamentMatches(List<TournamentMatch> tournamentMatches) {
+		this.tournamentMatches = tournamentMatches;
 	}
 	
 }
