@@ -75,10 +75,12 @@ public class GameServiceImpl implements GameService {
 		Game dbGame = gameRepo.saveAndFlush(game);
 		List<Team> teams = game.getTeams();
 		game.setTeams(null);
+		dbGame.setTeams(null);
 		for (Team team : teams) {
 			Team dbTeam = teamRepo.save(team);
 			List<Player> players = team.getPlayers();
 			team.setPlayers(null);
+			dbTeam.setPlayers(null);
 			for (int i = 0; i < players.size(); i++) {
 				Player player = players.get(i);
 				User user = player.getUser();
