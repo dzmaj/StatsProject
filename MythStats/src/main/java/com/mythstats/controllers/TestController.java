@@ -49,6 +49,7 @@ public class TestController {
 		return game;
 	}
 	
+	
 	@GetMapping("gos/list/{start}/{end}")
 	public List<Game> getOrParseRange(@PathVariable Integer start, @PathVariable Integer end) {
 		List<Game> games = new ArrayList();
