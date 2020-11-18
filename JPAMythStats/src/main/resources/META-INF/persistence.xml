@@ -4,17 +4,25 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-  <persistence-unit name="VideoStore">
+  <persistence-unit name="MythStats">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider
     </provider>
 	
 	<!-- List Entities Here -->
 	<class>com.mythstats.data.entities.Game</class>
+	<class>com.mythstats.data.entities.Difficulty</class>
+	<class>com.mythstats.data.entities.Gametype</class>
+	<class>com.mythstats.data.entities.Player</class>
+	<class>com.mythstats.data.entities.Team</class>
+	<class>com.mythstats.data.entities.Tournament</class>
+	<class>com.mythstats.data.entities.TournamentMatch</class>
+	<class>com.mythstats.data.entities.TournamentTeam</class>
+	<class>com.mythstats.data.entities.User</class>
 
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sdvid?useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=US/Mountain" />
-      <property name="javax.persistence.jdbc.user" value="student"/>
-      <property name="javax.persistence.jdbc.password" value="student" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gamestatsdb?useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=US/Mountain" />
+      <property name="javax.persistence.jdbc.user" value="gamestatsuser"/>
+      <property name="javax.persistence.jdbc.password" value="gamestatsuser" />
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
 
       <property name="hibernate.show_sql" value="true" />

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,13 +27,18 @@ public class Parser {
 	private Element content;
 	private Game game;
 	private String gameHostNameStr;
+	private Connection conn;
 
 	public Game parse(int gameId) {
 		game = null;
 		String url = URL_BASE + gameId;
 		Document doc;
 		try {
-			doc = Jsoup.connect(url).get();
+			conn = Jsoup.connect(url);
+			if (conn.response().statusCode() == 404) {
+				return null;
+			}
+			doc = conn.get();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -95,7 +101,7 @@ public class Parser {
 		Duration d = Duration.between(LocalTime.of(0, 0), t);
 		LocalDateTime endDateTime = game.getStartDateTime().plusSeconds(d.getSeconds());
 		game.setEndDateTime(endDateTime);
-		game.setDuration((int) d.getSeconds());
+		game.setDuration((int) d.getSeconds() * 30);
 	}
 
 	private Gametype parseGametype(String gameType) {
@@ -196,7 +202,7 @@ public class Parser {
 			m.find();
 			t = LocalTime.parse(m.group(1));
 			d = Duration.between(LocalTime.of(0, 0), t);
-			game.setTimeLimit((int) d.getSeconds());
+			game.setTimeLimit((int) d.getSeconds() * 30);
 		} else {
 			game.setTimeLimit(-1);
 		}
@@ -204,7 +210,7 @@ public class Parser {
 			m.find();
 			t = LocalTime.parse(m.group(1));
 			d = Duration.between(LocalTime.of(0, 0), t);
-			game.setPlanningTimeLimit((int) d.getSeconds());
+			game.setPlanningTimeLimit((int) d.getSeconds() * 30);
 		} else {
 			game.setPlanningTimeLimit(0);
 		}
