@@ -293,6 +293,9 @@ public class Parser {
 			} catch (Exception e) {
 				userId = "-1";
 			}
+			if (player.getNickName().equals(gameHostNameStr)) {
+				player.setHost(true);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -334,6 +337,9 @@ public class Parser {
 			String status = tableData.get(8).text();
 			if (status.equals("Dropped")) {
 				player.setDropped(true);
+			}
+			if (player.getNickName().equals(gameHostNameStr)) {
+				player.setHost(true);
 			}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
