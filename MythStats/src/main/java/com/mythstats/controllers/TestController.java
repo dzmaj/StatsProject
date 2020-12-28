@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,8 @@ import com.mythstats.services.GameService;
 import com.mythstats.services.PlayerService;
 import com.mythstats.services.TeamService;
 
-@RequestMapping("api/test")
+@CrossOrigin({ "*", "http:localhost:4208" })
+@RequestMapping("api")
 @RestController
 public class TestController {
 	
@@ -33,7 +35,7 @@ public class TestController {
 		return "pong";
 	}
 	
-	@GetMapping("gos/{id}")
+	@GetMapping("gos/games/{id}")
 	public Game getOrParse(@PathVariable Integer id) {
 		Game game = null;
 		game = gameSvc.find(id);
