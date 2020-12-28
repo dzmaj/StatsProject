@@ -1,73 +1,109 @@
 package com.mythstats.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mythstats.data.entities.Game;
+import com.mythstats.data.entities.Tournament;
+import com.mythstats.data.entities.TournamentMatch;
 import com.mythstats.scraper.Parser;
 import com.mythstats.services.GameService;
 import com.mythstats.services.PlayerService;
-import com.mythstats.services.TeamService;
+import com.mythstats.services.TournamentMatchService;
+import com.mythstats.services.TournamentService;
 
-@RequestMapping("api/test")
+@CrossOrigin({ "*", "http:localhost:4208" })
+@RequestMapping("api")
 @RestController
 public class TournamentController {
 	
 	@Autowired
 	private GameService gameSvc;
 	@Autowired
-	private TeamService teamSvc;
+	private TournamentService tournSvc;
+	@Autowired
+	private TournamentMatchService tournMatchSvc;
 	@Autowired
 	private PlayerService playerSvc;
 	
 	private Parser parser;
-	
-	@GetMapping("ping")
-	public String pingPong() {
-		return "pong";
+
+	@GetMapping("tournaments/{id}")
+	public Tournament find(HttpServletRequest req, HttpServletResponse res, @PathVariable Integer id) {
+		Tournament tourn = tournSvc.find(id);
+		if (tourn == null) {
+			res.setStatus(404);
+		}
+		return tourn;
 	}
 	
-	@GetMapping("gos/{id}")
-	public Game getOrParse(@PathVariable Integer id) {
-		Game game = null;
-		game = gameSvc.find(id);
-		if (game == null) {
-			parser = new Parser();
-			game = parser.parse(id);
-			if (game != null) {
-				game = gameSvc.createFromGoS(game);
-			}
-		}
-		
-		
-		return game;
+	@GetMapping("tournaments")
+	public List<Tournament> index(HttpServletRequest req, HttpServletResponse res) {
+		return tournSvc.index();
 	}
 	
-	
-	@GetMapping("gos/list/{start}/{end}")
-	public List<Game> getOrParseRange(@PathVariable Integer start, @PathVariable Integer end) {
-		List<Game> games = new ArrayList();
-		for (int i = start; i <= end; i++) {
-			Game game = null;
-			game = gameSvc.find(i);
-			if (game == null) {
-				parser = new Parser();
-				game = parser.parse(i);
-				if (game != null) {
-					game = gameSvc.createFromGoS(game);
-				}
+	@PostMapping("tournaments")
+	public Tournament create(HttpServletRequest req, HttpServletResponse res, @RequestBody Tournament tourn) {
+		try {
+			tourn = tournSvc.create(tourn);
+			if (tourn == null) {
+				res.setStatus(400);
+			} else {
+				res.setStatus(201);
+				StringBuffer url = req.getRequestURL();
+				url.append("/").append(tourn.getId());
 			}
-			if (game != null) {
-				games.add(game);
-			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+			res.setStatus(400);
+			tourn = null;
 		}
-		return games;
+		return tourn;
+	}
+	
+	@PutMapping("tournaments/{id}")
+	public Tournament update(HttpServletRequest req, HttpServletResponse res, @RequestBody Tournament tourn, @PathVariable Integer id) {
+		try {
+			tourn = tournSvc.update(tourn, id);
+			if (tourn == null) {
+				res.setStatus(400);
+			} else {
+				res.setStatus(200);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			res.setStatus(400);
+			tourn = null;
+		}
+		return tourn;
+	}
+	
+	@PostMapping("tournaments/{id}/matches")
+	public TournamentMatch addMatch(HttpServletRequest req, HttpServletResponse res, @RequestBody TournamentMatch tournMatch, @PathVariable Integer id) {
+		try {
+			tournMatch = tournMatchSvc.create(tournMatch, id);
+			if (tournMatch == null) {
+				res.setStatus(400);
+			} else {
+				res.setStatus(200);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			res.setStatus(400);
+			tournMatch = null;
+		}
+		return tournMatch;
 	}
 	
 }

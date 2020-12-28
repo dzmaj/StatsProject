@@ -109,5 +109,12 @@ public class Tournament {
 		this.tournamentMatches = tournamentMatches;
 	}
 	
+	public void addMatch(TournamentMatch match) {
+		if (!this.tournamentMatches.contains(match)) {
+			this.tournamentMatches.add(match);
+			match.setTournament(this);
+		}
+	}
+	
 
 }

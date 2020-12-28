@@ -9,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameMainComponent } from './components/gamePage/game-main/game-main.component';
 import { TournamentMainComponent } from './components/tournaments/tournament-main/tournament-main.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { TournamentMainComponent } from './components/tournaments/tournament-mai
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    NgbModule,
   ],
   providers: [
     AuthService,
