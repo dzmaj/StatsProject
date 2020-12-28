@@ -1,3 +1,4 @@
+import { Team } from './../../../models/team';
 import { GameService } from './../../../services/game.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Game } from 'src/app/models/game';
@@ -30,28 +31,21 @@ export class GameMainComponent implements OnInit {
     );
     this.load();
   }
-  ngOnChanges(): void {
-    try {
-      let id = Number.parseInt(this.currentRoute.snapshot.paramMap.get('id'));
-      this.currentRoute
-      if (id) {
-        this.gameId = id;
-      }
-    } catch {
-    }
-    console.log(this.gameId)
-    this.load();
-  }
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy');
 
-  }
 
   load(): void {
     this.gameService.show(this.gameId).subscribe(
       data => this.game = data,
       err => console.error(err)
     )
+  }
+
+  calcTeamStatsTotal(team: Team, stat: string): number {
+    let total = 0;
+    team.players.forEach(player => {
+      total += player[stat];
+    });
+    return total;
   }
 
 }
