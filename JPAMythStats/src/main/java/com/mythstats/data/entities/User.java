@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "metaserver_user")
@@ -39,9 +41,14 @@ public class User {
 	@Column(name = "last_login_datetime")
 	private LocalDateTime lastLoginDateTime;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties({"gameTeams", "tournament", "metaserverUsers"})
 	@ManyToMany(mappedBy = "metaserverUsers")
 	private List<TournamentTeam> tournamentTeams;
+	
+	@JsonIgnoreProperties({"metaserverUsers", "tournaments", "password"})
+	@ManyToOne
+	@JoinColumn(name="site_user_id")
+	private SiteUser siteUser;
 
 	public User() {
 		super();

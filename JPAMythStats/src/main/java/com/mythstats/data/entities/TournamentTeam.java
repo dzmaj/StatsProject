@@ -1,7 +1,9 @@
 package com.mythstats.data.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class TournamentTeam {
@@ -22,10 +29,12 @@ public class TournamentTeam {
 	
 	private String description;
 	
+	@JsonIgnoreProperties({"tournamentTeams"})
 	@ManyToOne
 	@JoinColumn(name = "tournament_id")
 	private Tournament tournament;
 	
+	@JsonIgnoreProperties({"tournamentTeams"})
 	@ManyToMany
 	@JoinTable(name="game_team_to_tournament_team",
 	    joinColumns=@JoinColumn(name="tournament_team_id"),
@@ -33,11 +42,25 @@ public class TournamentTeam {
 	)
 	private List<Team> gameTeams;
 	
+	@JsonIgnoreProperties({"tournamentTeams"})
 	@ManyToMany
 	@JoinTable(name="metaserver_user_to_tournament_team",
 	joinColumns=@JoinColumn(name="tournament_team_id"),
 	inverseJoinColumns=@JoinColumn(name="metaserver_user_id"))
 	private List<User> metaserverUsers;
+	
+	@CreationTimestamp
+	@Column(name="creation_timestamp")
+	private LocalDateTime creationTimestamp;
+	
+	@UpdateTimestamp
+	@Column(name="update_timestamp")
+	private LocalDateTime updateTimestamp;
+	
+	@JsonIgnoreProperties({"tournaments", "metaserverUsers", "tournamentTeams"})
+	@ManyToOne
+	@JoinColumn(name="site_user_id")
+	private SiteUser owner;
 
 	public int getId() {
 		return id;

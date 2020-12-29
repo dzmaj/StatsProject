@@ -6,7 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Tournament {
@@ -24,6 +28,11 @@ public class Tournament {
 	
 	@OneToMany(mappedBy = "tournament")
 	private List<TournamentMatch> tournamentMatches;
+	
+	@JsonIgnoreProperties({"tournaments", "metaserverUsers"})
+	@ManyToOne
+	@JoinColumn(name="site_user_id")
+	private SiteUser owner;
 
 	public int getId() {
 		return id;
