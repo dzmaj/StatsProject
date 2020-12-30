@@ -30,7 +30,7 @@ public class TournamentGameScore {
 	
 	@JsonIgnoreProperties({"tournamentGameScores"})
 	@ManyToOne
-	@JoinColumn(name="game_team_id")
+	@JoinColumn(name="tournament_game_id")
 	private TournamentGame tournamentGame;
 
 	public int getId() {
