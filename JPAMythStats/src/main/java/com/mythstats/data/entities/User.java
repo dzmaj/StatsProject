@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -49,6 +50,10 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name="site_user_id")
 	private SiteUser siteUser;
+	
+	@JsonIgnoreProperties({"user"})
+	@OneToMany(mappedBy="user")
+	private List<Player> players;
 
 	public User() {
 		super();
@@ -73,6 +78,8 @@ public class User {
 		builder.append(registrationDateTime);
 		builder.append(", lastLoginDateTime=");
 		builder.append(lastLoginDateTime);
+		builder.append(", siteUser=");
+		builder.append(siteUser);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -169,5 +176,21 @@ public class User {
 
 	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
 		this.tournamentTeams = tournamentTeams;
+	}
+
+	public SiteUser getSiteUser() {
+		return siteUser;
+	}
+
+	public void setSiteUser(SiteUser siteUser) {
+		this.siteUser = siteUser;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
 }

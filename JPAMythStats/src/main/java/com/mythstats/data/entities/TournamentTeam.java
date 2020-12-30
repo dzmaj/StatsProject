@@ -29,7 +29,7 @@ public class TournamentTeam {
 	
 	private String description;
 	
-	@JsonIgnoreProperties({"tournamentTeams"})
+	@JsonIgnoreProperties({"tournamentTeams", "tournamentMatches"})
 	@ManyToOne
 	@JoinColumn(name = "tournament_id")
 	private Tournament tournament;
@@ -41,6 +41,14 @@ public class TournamentTeam {
 	    inverseJoinColumns=@JoinColumn(name="team_id")
 	)
 	private List<Team> gameTeams;
+	
+	@JsonIgnoreProperties({"tournamentTeams"})
+	@ManyToMany
+	@JoinTable(name="tournament_team_has_tournament_match",
+	    joinColumns=@JoinColumn(name="tournament_team_id"),
+	    inverseJoinColumns=@JoinColumn(name="tournament_match_id")
+	)
+	private List<TournamentMatch> tournamentMatches;
 	
 	@JsonIgnoreProperties({"tournamentTeams"})
 	@ManyToMany
@@ -135,6 +143,12 @@ public class TournamentTeam {
 		builder.append(description);
 		builder.append(", tournament=");
 		builder.append(tournament);
+		builder.append(", creationTimestamp=");
+		builder.append(creationTimestamp);
+		builder.append(", updateTimestamp=");
+		builder.append(updateTimestamp);
+		builder.append(", owner=");
+		builder.append(owner);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -154,6 +168,38 @@ public class TournamentTeam {
 
 	public void setMetaserverUsers(List<User> metaserverUsers) {
 		this.metaserverUsers = metaserverUsers;
+	}
+
+	public List<TournamentMatch> getTournamentMatches() {
+		return tournamentMatches;
+	}
+
+	public void setTournamentMatches(List<TournamentMatch> tournamentMatches) {
+		this.tournamentMatches = tournamentMatches;
+	}
+
+	public LocalDateTime getCreationTimestamp() {
+		return creationTimestamp;
+	}
+
+	public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+		this.creationTimestamp = creationTimestamp;
+	}
+
+	public LocalDateTime getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(LocalDateTime updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
+
+	public SiteUser getOwner() {
+		return owner;
+	}
+
+	public void setOwner(SiteUser owner) {
+		this.owner = owner;
 	}
 	
 }

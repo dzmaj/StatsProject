@@ -23,9 +23,11 @@ public class Tournament {
 	
 	private String description;
 	
+	@JsonIgnoreProperties({"tournament"})
 	@OneToMany(mappedBy = "tournament")
 	private List<TournamentTeam> tournamentTeams;
 	
+	@JsonIgnoreProperties({"tournament"})
 	@OneToMany(mappedBy = "tournament")
 	private List<TournamentMatch> tournamentMatches;
 	
@@ -76,6 +78,8 @@ public class Tournament {
 		builder.append(name);
 		builder.append(", description=");
 		builder.append(description);
+		builder.append(", owner=");
+		builder.append(owner);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -123,6 +127,14 @@ public class Tournament {
 			this.tournamentMatches.add(match);
 			match.setTournament(this);
 		}
+	}
+
+	public SiteUser getOwner() {
+		return owner;
+	}
+
+	public void setOwner(SiteUser owner) {
+		this.owner = owner;
 	}
 	
 

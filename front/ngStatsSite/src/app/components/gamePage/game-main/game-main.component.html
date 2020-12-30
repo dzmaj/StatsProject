@@ -18,7 +18,7 @@
     <tbody *ngFor="let team of game.teams">
       <tr *ngIf="!team.spectators">
         <td>{{team.place}}</td>
-        <td>{{team.teamName}}</td>
+        <td><span class="">{{team.teamName}}</span></td>
         <td>{{calcTeamStatsTotal(team, 'unitsKilled')}}</td>
         <td>{{calcTeamStatsTotal(team, 'unitsLost')}}</td>
         <td>{{calcTeamStatsTotal(team, 'unitsKilled') / calcTeamStatsTotal(team, 'unitsLost') | number:'1.0'}}</td>
@@ -41,8 +41,8 @@
       <tr *ngFor="let player of team.players">
         <td></td>
         <td>
-          <a *ngIf="player.user" [href]="'http://gateofstorms.net/users/'+player.user.id">{{player.nickName}}</a>
-          <p *ngIf="!player.user">{{player.nickName}}</p>
+          <a *ngIf="player.user" class="btn btn-outline-primary btn-sm btn-block" [href]="'http://gateofstorms.net/users/'+player.user.id">{{player.nickName}}</a>
+          <p *ngIf="!player.user" class="btn btn-outline-secondary disabled btn-sm btn-block">{{player.nickName}}</p>
         </td>
         <td>{{player.unitsKilled}}</td>
         <td>{{player.unitsLost}}</td>

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Game {
@@ -89,11 +88,11 @@ public class Game {
 	@Column(name = "recording_url")
 	private String recordingURL;
 	
-//	@JsonIgnore
+	@JsonIgnoreProperties({"game"})
 	@OneToMany(mappedBy = "game")
 	private List<Team> teams;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties({"games"})
 	@ManyToMany(mappedBy = "games")
 	private List<TournamentMatch> tournamentMatches;
 

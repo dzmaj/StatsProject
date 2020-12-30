@@ -208,4 +208,12 @@ public class SiteUser {
 		this.updateTimestamp = updateTimestamp;
 	}
 
+	public List<TournamentTeam> getTournamentTeams() {
+		return tournamentTeams;
+	}
+
+	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+		this.tournamentTeams = tournamentTeams;
+	}
+
 }
