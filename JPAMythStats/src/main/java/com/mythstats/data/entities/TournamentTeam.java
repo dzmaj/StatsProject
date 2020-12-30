@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,13 +35,9 @@ public class TournamentTeam {
 	@JoinColumn(name = "tournament_id")
 	private Tournament tournament;
 	
-	@JsonIgnoreProperties({"tournamentTeams"})
-	@ManyToMany
-	@JoinTable(name="game_team_to_tournament_team",
-	    joinColumns=@JoinColumn(name="tournament_team_id"),
-	    inverseJoinColumns=@JoinColumn(name="team_id")
-	)
-	private List<Team> gameTeams;
+	@JsonIgnoreProperties({"tournamentTeam"})
+	@OneToMany(mappedBy="tournamentTeam")
+	private List<TournamentGameScore> tournamentGameScores;
 	
 	@JsonIgnoreProperties({"tournamentTeams"})
 	@ManyToMany
@@ -102,13 +99,7 @@ public class TournamentTeam {
 		this.tournament = tournament;
 	}
 
-	public List<Team> getGameTeams() {
-		return gameTeams;
-	}
 
-	public void setGameTeams(List<Team> gameTeams) {
-		this.gameTeams = gameTeams;
-	}
 
 	@Override
 	public int hashCode() {
@@ -200,6 +191,14 @@ public class TournamentTeam {
 
 	public void setOwner(SiteUser owner) {
 		this.owner = owner;
+	}
+
+	public List<TournamentGameScore> getTournamentGameScores() {
+		return tournamentGameScores;
+	}
+
+	public void setTournamentGameScores(List<TournamentGameScore> tournamentGameScores) {
+		this.tournamentGameScores = tournamentGameScores;
 	}
 	
 }

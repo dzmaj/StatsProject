@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -46,9 +45,10 @@ public class Team {
 	@OneToMany(mappedBy = "team")
 	private List<Player> players;
 	
+	@JsonIgnoreProperties({"team"})
 	@JsonIgnore
-	@ManyToMany(mappedBy = "gameTeams")
-	private List<TournamentTeam> tournamentTeams;
+	@OneToMany(mappedBy = "team")
+	private List<TournamentGameScore> tournamentGameScores;
 
 	public Team() {
 		super();
@@ -169,12 +169,14 @@ public class Team {
 		this.players = players;
 	}
 
-	public List<TournamentTeam> getTournamentTeams() {
-		return tournamentTeams;
+	public List<TournamentGameScore> getTournamentGameScores() {
+		return tournamentGameScores;
 	}
 
-	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-		this.tournamentTeams = tournamentTeams;
+	public void setTournamentGameScores(List<TournamentGameScore> tournamentGameScores) {
+		this.tournamentGameScores = tournamentGameScores;
 	}
+
+
 
 }

@@ -8,9 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -31,12 +31,11 @@ public class TournamentMatch {
 	@JoinColumn(name = "tournament_id")
 	private Tournament tournament;
 	
-	@ManyToMany
-	@JoinTable(name = "tournament_match_to_game",
-		joinColumns = @JoinColumn(name = "game_id"),
-		inverseJoinColumns = @JoinColumn(name = "tournament_match_id"))
-	private List<Game> games;
+	@JsonIgnoreProperties({"tournamentMatch"})
+	@OneToMany(mappedBy="tournamentMatch")
+	private List<TournamentGame> TournamentGames;
 	
+	@JsonIgnoreProperties({"tournamentMatches"})
 	@ManyToMany(mappedBy="tournamentMatches")
 	private List<TournamentTeam> tournamentTeams;
 	
@@ -77,14 +76,6 @@ public class TournamentMatch {
 
 	public void setTournament(Tournament tournament) {
 		this.tournament = tournament;
-	}
-
-	public List<Game> getGames() {
-		return games;
-	}
-
-	public void setGames(List<Game> games) {
-		this.games = games;
 	}
 
 	@Override
@@ -159,6 +150,14 @@ public class TournamentMatch {
 
 	public void setScheduledTime(LocalDateTime scheduledTime) {
 		this.scheduledTime = scheduledTime;
+	}
+
+	public List<TournamentGame> getTournamentGames() {
+		return TournamentGames;
+	}
+
+	public void setTournamentGames(List<TournamentGame> tournamentGames) {
+		TournamentGames = tournamentGames;
 	}
 	
 	

@@ -92,9 +92,9 @@ public class Game {
 	@OneToMany(mappedBy = "game")
 	private List<Team> teams;
 	
-	@JsonIgnoreProperties({"games"})
-	@ManyToMany(mappedBy = "games")
-	private List<TournamentMatch> tournamentMatches;
+	@JsonIgnoreProperties({"game", "tournamentGameScores"})
+	@ManyToMany(mappedBy = "game")
+	private List<TournamentGame> tournamentGames;
 
 	public Game() {
 		super();
@@ -376,12 +376,13 @@ public class Game {
 		this.playerCount = playerCount;
 	}
 
-	public List<TournamentMatch> getTournamentMatches() {
-		return tournamentMatches;
+	public List<TournamentGame> getTournamentGames() {
+		return tournamentGames;
 	}
 
-	public void setTournamentMatches(List<TournamentMatch> tournamentMatches) {
-		this.tournamentMatches = tournamentMatches;
+	public void setTournamentGames(List<TournamentGame> tournamentGames) {
+		this.tournamentGames = tournamentGames;
 	}
+
 	
 }
