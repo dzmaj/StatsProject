@@ -3,19 +3,18 @@ package com.mythstats.data.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "game_team")
@@ -25,7 +24,7 @@ public class Team {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties({"teams", "tournamentMatches"})
 	@ManyToOne
 	@JoinColumn(name = "game_id")
 	private Game game;
@@ -42,13 +41,14 @@ public class Team {
 	@Column(name = "team_name")
 	private String teamName;
 	
-//	@JsonIgnore
+	@JsonIgnoreProperties({"team"})
 	@OneToMany(mappedBy = "team")
 	private List<Player> players;
 	
+	@JsonIgnoreProperties({"team"})
 	@JsonIgnore
-	@ManyToMany(mappedBy = "gameTeams")
-	private List<TournamentTeam> tournamentTeams;
+	@OneToMany(mappedBy = "team")
+	private List<TournamentGameScore> tournamentGameScores;
 
 	public Team() {
 		super();
@@ -67,6 +67,8 @@ public class Team {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Team [id=");
 		builder.append(id);
+		builder.append(", game=");
+		builder.append(game);
 		builder.append(", place=");
 		builder.append(place);
 		builder.append(", placeTie=");
@@ -167,12 +169,14 @@ public class Team {
 		this.players = players;
 	}
 
-	public List<TournamentTeam> getTournamentTeams() {
-		return tournamentTeams;
+	public List<TournamentGameScore> getTournamentGameScores() {
+		return tournamentGameScores;
 	}
 
-	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-		this.tournamentTeams = tournamentTeams;
+	public void setTournamentGameScores(List<TournamentGameScore> tournamentGameScores) {
+		this.tournamentGameScores = tournamentGameScores;
 	}
+
+
 
 }

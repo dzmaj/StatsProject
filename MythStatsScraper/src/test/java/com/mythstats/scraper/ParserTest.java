@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.mythstats.data.entities.Game;
-import com.mythstats.data.entities.Player;
-import com.mythstats.data.entities.Team;
 
 class ParserTest {
 	private Parser parser;
@@ -94,13 +92,6 @@ class ParserTest {
 		assertNotNull(game);
 		assertNotNull(game.getTeams());
 		assertEquals(2, game.getTeams().size());
-		System.out.println(game);
-		for (Team t : game.getTeams()) {
-			System.out.println(t);
-			for (Player p : t.getPlayers()) {
-				System.out.println(p);
-			}
-		}
 	}
 	
 

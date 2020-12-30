@@ -1,9 +1,57 @@
 <div *ngIf="game">
-  <ul>
-    <li>{{game.gameName}}</li>
-    <li>{{game.gametype.name}}</li>
-    <li>{{game.difficulty.name}}</li>
-    <li>{{game.id}}</li>
-    <li>{{game.mapName}}</li>
-  </ul>
+  <h3>{{game.gametype.name}} on {{game.mapName}}</h3>
+  <a [href]="'http://gateofstorms.net/games/'+game.id">GoS Page</a>
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Place</th>
+        <th>Name</th>
+        <th>Killed</th>
+        <th>Lost</th>
+        <th>Kill Ratio</th>
+        <th>Damage Given</th>
+        <th>Damage Taken</th>
+        <th>Damage Ratio</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let team of game.teams">
+      <tr *ngIf="!team.spectators">
+        <td>{{team.place}}</td>
+        <td><span class="">{{team.teamName}}</span></td>
+        <td>{{calcTeamStatsTotal(team, 'unitsKilled')}}</td>
+        <td>{{calcTeamStatsTotal(team, 'unitsLost')}}</td>
+        <td>{{calcTeamStatsTotal(team, 'unitsKilled') / calcTeamStatsTotal(team, 'unitsLost') | number:'1.0'}}</td>
+        <td>{{calcTeamStatsTotal(team, 'damageGiven')}}</td>
+        <td>{{calcTeamStatsTotal(team, 'damageTaken')}}</td>
+        <td>{{calcTeamStatsTotal(team, 'damageGiven') / calcTeamStatsTotal(team, 'damageTaken') | number:'1.0'}}</td>
+        <td><p *ngIf="team.eliminated">Eliminated</p></td>
+      </tr>
+      <tr *ngIf="team.spectators">
+        <td></td>
+        <td>Spectators</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let player of team.players">
+        <td></td>
+        <td>
+          <a *ngIf="player.user" class="btn btn-outline-primary btn-sm btn-block" [href]="'http://gateofstorms.net/users/'+player.user.id">{{player.nickName}}</a>
+          <p *ngIf="!player.user" class="btn btn-outline-secondary disabled btn-sm btn-block">{{player.nickName}}</p>
+        </td>
+        <td>{{player.unitsKilled}}</td>
+        <td>{{player.unitsLost}}</td>
+        <td>{{player.unitsKilled / player.unitsLost | number:'1.0'}}</td>
+        <td>{{player.damageGiven}}</td>
+        <td>{{player.damageTaken}}</td>
+        <td>{{player.damageGiven / player.damageTaken | number:'1.0'}}</td>
+        <td><p *ngIf="player.dropped">Dropped</p></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

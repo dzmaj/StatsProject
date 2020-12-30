@@ -6,10 +6,13 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "metaserver_user")
@@ -39,9 +42,18 @@ public class User {
 	@Column(name = "last_login_datetime")
 	private LocalDateTime lastLoginDateTime;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties({"gameTeams", "tournament", "metaserverUsers"})
 	@ManyToMany(mappedBy = "metaserverUsers")
 	private List<TournamentTeam> tournamentTeams;
+	
+	@JsonIgnoreProperties({"metaserverUsers", "tournaments", "password"})
+	@ManyToOne
+	@JoinColumn(name="site_user_id")
+	private SiteUser siteUser;
+	
+	@JsonIgnoreProperties({"user"})
+	@OneToMany(mappedBy="user")
+	private List<Player> players;
 
 	public User() {
 		super();
@@ -66,6 +78,8 @@ public class User {
 		builder.append(registrationDateTime);
 		builder.append(", lastLoginDateTime=");
 		builder.append(lastLoginDateTime);
+		builder.append(", siteUser=");
+		builder.append(siteUser);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -162,5 +176,21 @@ public class User {
 
 	public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
 		this.tournamentTeams = tournamentTeams;
+	}
+
+	public SiteUser getSiteUser() {
+		return siteUser;
+	}
+
+	public void setSiteUser(SiteUser siteUser) {
+		this.siteUser = siteUser;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
 }

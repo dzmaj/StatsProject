@@ -4,15 +4,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-  <persistence-unit name="MythStats">
+  <persistence-unit name="MythStatsPU">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider
     </provider>
 	
 	<!-- List Entities Here -->
-	<class>com.mythstats.data.entities.Game</class>
 	<class>com.mythstats.data.entities.Difficulty</class>
+	<class>com.mythstats.data.entities.Game</class>
 	<class>com.mythstats.data.entities.Gametype</class>
 	<class>com.mythstats.data.entities.Player</class>
+	<class>com.mythstats.data.entities.SiteUser</class>
 	<class>com.mythstats.data.entities.Team</class>
 	<class>com.mythstats.data.entities.Tournament</class>
 	<class>com.mythstats.data.entities.TournamentMatch</class>
