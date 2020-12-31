@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -32,16 +33,16 @@ public class TournamentTeam {
 	
 	private String description;
 	
-	@JsonIgnoreProperties({"tournamentTeams", "tournamentMatches"})
+	@JsonIgnoreProperties({"tournamentTeams", "tournamentMatches", "owner"})
 	@ManyToOne
 	@JoinColumn(name = "tournament_id")
 	private Tournament tournament;
 	
-	@JsonIgnoreProperties({"tournamentTeam"})
+	@JsonIgnore
 	@OneToMany(mappedBy="tournamentTeam")
 	private List<TournamentGameScore> tournamentGameScores;
 	
-	@JsonIgnoreProperties({"tournamentTeams"})
+	@JsonIgnoreProperties({"tournamentTeams", "tournament", "tournamentGames"})
 	@ManyToMany
 	@JoinTable(name="tournament_team_has_tournament_match",
 	    joinColumns=@JoinColumn(name="tournament_team_id"),
@@ -49,7 +50,7 @@ public class TournamentTeam {
 	)
 	private List<TournamentMatch> tournamentMatches;
 	
-	@JsonIgnoreProperties({"tournamentTeams"})
+	@JsonIgnoreProperties({"tournamentTeams", "players"})
 	@ManyToMany
 	@JoinTable(name="metaserver_user_to_tournament_team",
 	joinColumns=@JoinColumn(name="tournament_team_id"),

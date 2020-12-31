@@ -20,17 +20,17 @@ public class TournamentGameScore {
 	
 	private Integer score;
 	
-	@JsonIgnoreProperties({"tournamentGameScores"})
+	@JsonIgnoreProperties({"tournamentGameScores", "tournament", "tournamentMatches", "metaserverUsers", "owner"})
 	@ManyToOne
 	@JoinColumn(name="tournament_team_id")
 	private TournamentTeam tournamentTeam;
 	
-	@JsonIgnoreProperties({"tournamentGameScores", "game"})
+	@JsonIgnoreProperties({"tournamentGameScores", "game", "players"})
 	@ManyToOne
 	@JoinColumn(name="game_team_id")
 	private Team team;
 	
-	@JsonIgnoreProperties({"tournamentGameScores"})
+	@JsonIgnoreProperties({"tournamentGameScores", "tournamentMatch", "game"})
 	@ManyToOne
 	@JoinColumn(name="tournament_game_id")
 	private TournamentGame tournamentGame;

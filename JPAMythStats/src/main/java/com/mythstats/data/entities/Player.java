@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -19,7 +20,7 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@JsonIgnoreProperties({"players"})
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	private Team team;

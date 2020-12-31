@@ -1,1 +1,18 @@
-<p>tournament-main works!</p>
+<div *ngIf="tournament">
+  <div>
+    <h3>{{tournament.name}}</h3>
+  </div>
+  <div class="col">
+    <table>
+      <thead>
+
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of tournament.tournamentTeams">
+          <td>{{team.name}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

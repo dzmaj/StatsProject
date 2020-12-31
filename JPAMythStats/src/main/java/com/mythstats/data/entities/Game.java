@@ -88,11 +88,11 @@ public class Game {
 	@Column(name = "recording_url")
 	private String recordingURL;
 	
-	@JsonIgnoreProperties({"game"})
+	@JsonIgnoreProperties({"game", "tournamentGameScores"})
 	@OneToMany(mappedBy = "game")
 	private List<Team> teams;
 	
-	@JsonIgnoreProperties({"game", "tournamentGameScores"})
+	@JsonIgnoreProperties({"game", "tournamentGameScores", "tournamentMatch"})
 	@ManyToMany(mappedBy = "game")
 	private List<TournamentGame> tournamentGames;
 

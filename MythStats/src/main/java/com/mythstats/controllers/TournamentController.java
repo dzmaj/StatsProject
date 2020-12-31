@@ -53,7 +53,7 @@ public class TournamentController {
 		return tournSvc.index();
 	}
 	
-	@PostMapping("tournaments")
+	@PostMapping("auth/tournaments")
 	public Tournament create(HttpServletRequest req, HttpServletResponse res, @RequestBody Tournament tourn) {
 		try {
 			tourn = tournSvc.create(tourn);
@@ -72,7 +72,7 @@ public class TournamentController {
 		return tourn;
 	}
 	
-	@PutMapping("tournaments/{id}")
+	@PutMapping("auth/tournaments/{id}")
 	public Tournament update(HttpServletRequest req, HttpServletResponse res, @RequestBody Tournament tourn, @PathVariable Integer id) {
 		try {
 			tourn = tournSvc.update(tourn, id);
@@ -89,7 +89,7 @@ public class TournamentController {
 		return tourn;
 	}
 	
-	@PostMapping("tournaments/{id}/matches")
+	@PostMapping("auth/tournaments/{id}/matches")
 	public TournamentMatch addMatch(HttpServletRequest req, HttpServletResponse res, @RequestBody TournamentMatch tournMatch, @PathVariable Integer id) {
 		try {
 			tournMatch = tournMatchSvc.create(tournMatch, id);

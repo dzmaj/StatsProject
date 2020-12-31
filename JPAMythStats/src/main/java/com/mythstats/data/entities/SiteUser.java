@@ -39,7 +39,7 @@ public class SiteUser {
 	
 	private String role;
 	
-	@JsonIgnoreProperties({"siteUser"})
+	@JsonIgnoreProperties({"siteUser", "tournamentTeams"})
 	@OneToMany(mappedBy="siteUser")
 	private List<User> metaserverUsers;
 	
@@ -47,7 +47,7 @@ public class SiteUser {
 	@OneToMany(mappedBy="owner")
 	private List<Tournament> tournaments;
 	
-	@JsonIgnoreProperties({"tournamentTeams", "tournamentMatches", "owner"})
+	@JsonIgnoreProperties({"tournamentGameScores", "tournamentMatches", "owner", "tournament", "metaserverUsers"})
 	@OneToMany(mappedBy="owner")
 	private List<TournamentTeam> tournamentTeams;
 	
