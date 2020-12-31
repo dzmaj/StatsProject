@@ -22,6 +22,8 @@ import { MatListModule } from '@angular/material/list';
 import { TournamentTeamComponent } from './components/tournaments/tournament-team/tournament-team.component';
 import { TournamentMatchComponent } from './components/tournaments/tournament-match/tournament-match.component';
 import { TournamentGameComponent } from './components/tournaments/tournament-game/tournament-game.component';
+import { MetaserverUserComponent } from './components/users/metaserver-user/metaserver-user.component';
+import { MostRecentNamePipe } from './pipes/most-recent-name.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { TournamentGameComponent } from './components/tournaments/tournament-gam
     NavigatorComponent,
     TournamentTeamComponent,
     TournamentMatchComponent,
-    TournamentGameComponent
+    TournamentGameComponent,
+    MetaserverUserComponent,
+    MostRecentNamePipe
   ],
   imports: [
     BrowserModule,
