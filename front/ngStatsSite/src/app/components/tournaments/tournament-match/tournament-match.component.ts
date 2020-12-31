@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { TournamentMatch } from './../../../models/tournament-match';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-tournament-match',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tournament-match.component.css']
 })
 export class TournamentMatchComponent implements OnInit {
+
+  @Input() tournamentMatch: TournamentMatch;
 
   constructor() { }
 

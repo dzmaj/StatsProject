@@ -9,6 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TournamentTeamComponent implements OnInit {
 
   @Input() tournamentTeam: TournamentTeam;
+  editTeam: TournamentTeam;
 
   constructor() { }
 

@@ -5,6 +5,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCardModule} from '@angular/material/card';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatInputModule} from '@angular/material/input';
+import {MatTreeModule} from '@angular/material/tree';
+import {MatTableModule} from '@angular/material/table';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameMainComponent } from './components/gamePage/game-main/game-main.component';
@@ -50,11 +57,18 @@ import { MostRecentNamePipe } from './pipes/most-recent-name.pipe';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatCardModule,
+    MatTabsModule,
+    MatGridListModule,
+    MatInputModule,
+    MatTreeModule,
+    MatTableModule,
   ],
   providers: [
     AuthService,
     GameService,
     TournamentService,
+    MostRecentNamePipe,
   ],
   bootstrap: [AppComponent]
 })

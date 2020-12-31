@@ -1,3 +1,5 @@
+import { Player } from './../../../models/player';
+import { MostRecentNamePipe } from './../../../pipes/most-recent-name.pipe';
 import { User } from './../../../models/user';
 import { Component, Input, OnInit } from '@angular/core';
 
@@ -8,11 +10,15 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MetaserverUserComponent implements OnInit {
 
-  @Input() user: User
+  @Input() user: User;
+  latestPlayer: Player;
 
-  constructor() { }
+  constructor(private mostRecentNamePipe: MostRecentNamePipe) { }
 
   ngOnInit(): void {
+    // this.latestPlayer = this.mostRecentNamePipe.transform(this.user)
   }
+
+
 
 }

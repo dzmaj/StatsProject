@@ -1,18 +1,88 @@
-<div *ngIf="tournament">
-  <div>
+<div *ngIf="tournament" class="container">
+  <div class="text-center">
     <h3>{{tournament.name}}</h3>
   </div>
-  <div class="col">
-    <table>
-      <thead>
+  <mat-tab-group color="primary">
+    <mat-tab label="Info">
+      <p>{{tournament.description}}</p>
+      <p>Managed by <span>{{tournament.owner.username}}</span></p>
+    </mat-tab>
+    <mat-tab label="Teams">
+      <div class="row">
+        <div class="col">
+          <!-- <table class="table table-dark table-hover">
+            <thead></thead>
+            <tbody>
+              <tr *ngFor="let tournamentTeam of tournament.tournamentTeams" (click)="selectedTeam = tournamentTeam">
+                <td>
+                  {{tournamentTeam.name}}
+                </td>
+              </tr>
+            </tbody>
+          </table> -->
 
-      </thead>
-      <tbody>
-        <tr *ngFor="let team of tournament.tournamentTeams">
-          <td>{{team.name}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          <table mat-table [dataSource]="tournament.tournamentTeams" class="table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let team"> {{team.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="players">
+              <th mat-header-cell *matHeaderCellDef> Players </th>
+              <td mat-cell *matCellDef="let team"> {{team.metaserverUsers.length}} </td>
+            </ng-container>
+
+            <thead>
+              <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            </thead>
+            <tbody>
+              <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="selectedTeam = myRowData"></tr>
+            </tbody>
+
+          </table>
+        </div>
+
+
+        <div class="col">
+          <app-tournament-team *ngIf="selectedTeam" [tournamentTeam]="selectedTeam"></app-tournament-team>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Matches">
+
+      <div class="row">
+        <div class="col-3">
+          <table class="table table-dark table-hover">
+            <thead></thead>
+            <tbody>
+              <tr *ngFor="let tournamentMatch of tournament.tournamentMatches" (click)="selectedMatch = tournamentMatch">
+                <td>
+                  {{tournamentMatch.name}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-9">
+          <app-tournament-match *ngIf="selectedMatch" [tournamentMatch]="selectedMatch"></app-tournament-match>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Players">
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+
+
+
+
 
 </div>
+

@@ -1,1 +1,26 @@
-<p>tournament-match works!</p>
+<mat-card>
+  <mat-card-title>
+    {{tournamentMatch.name}}
+  </mat-card-title>
+  <mat-card-subtitle>
+    {{tournamentMatch.description}}
+  </mat-card-subtitle>
+  <mat-card-content>
+    <!-- <mat-list>
+      <mat-list-item *ngFor="let game of tournamentMatch.tournamentGames">
+        <p matLine>
+          <span>{{game.game.gametype.name + ' on ' + game.game.mapName}}</span>
+        </p>
+        <p matLine *ngFor="let score of game.tournamentGameScores">
+          <br>
+          <span>{{score.tournamentTeam.name}}</span>
+          <span> ({{score.score}})</span>
+        </p>
+      </mat-list-item>
+    </mat-list> -->
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>Edit</button>
+    <button mat-button>Add Game</button>
+  </mat-card-actions>
+</mat-card>

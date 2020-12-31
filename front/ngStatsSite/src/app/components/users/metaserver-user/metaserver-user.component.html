@@ -1,1 +1,6 @@
-<p>metaserver-user works!</p>
+<p>
+
+  <span><a [href]="'http://gateofstorms.net/users/'+user.id">{{user.id}}</a></span>
+  <!-- <span><a [href]="'http://gateofstorms.net/users/'+user.id">{{latestPlayer.nickName}}</a></span> -->
+  <span *ngIf="user.siteUser"><a [href]="">{{user.siteUser.username}}</a></span>
+</p>

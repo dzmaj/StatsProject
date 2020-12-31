@@ -1,8 +1,30 @@
-<div>
+<mat-card>
+  <mat-card-title>
+    {{tournamentTeam.name}}
+  </mat-card-title>
+  <mat-card-content>
+    <blockquote>{{tournamentTeam.description}}</blockquote>
+    <ul>
+      <li *ngFor="let user of tournamentTeam.metaserverUsers">
+        <app-metaserver-user [user]="user"></app-metaserver-user>
+      </li>
+    </ul>
 
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>Edit</button>
+  </mat-card-actions>
+</mat-card>
+<!-- <div>
+  <h4>
+    {{tournamentTeam.name}}
+  </h4>
+  <blockquote>
+    {{tournamentTeam.description}}
+  </blockquote>
   <ul>
-    <li *ngFor="let metaserverUser of tournamentTeam.metaserverUsers">
-
+    <li *ngFor="let user of tournamentTeam.metaserverUsers">
+      <app-metaserver-user [user]="user"></app-metaserver-user>
     </li>
   </ul>
-</div>
+</div> -->

@@ -1,6 +1,8 @@
+import { TournamentMatch } from './../../../models/tournament-match';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Tournament } from 'src/app/models/tournament';
+import { TournamentTeam } from 'src/app/models/tournament-team';
 import { TournamentService } from 'src/app/services/tournament.service';
 
 @Component({
@@ -12,6 +14,10 @@ export class TournamentMainComponent implements OnInit {
 
   @Input() tournamentId: number;
   tournament: Tournament;
+  selectedTeam: TournamentTeam;
+  selectedMatch: TournamentMatch;
+
+  columnsToDisplay = ['name', 'players'];
 
   constructor(private tournamentService: TournamentService, private currentRoute: ActivatedRoute) { }
 
