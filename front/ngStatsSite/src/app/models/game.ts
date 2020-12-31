@@ -1,4 +1,4 @@
-import { TournamentMatch } from './tournament-match';
+import { TournamentGame } from './tournament-game';
 import { Difficulty } from "./difficulty";
 import { Gametype } from "./gametype";
 import { Team } from "./team";
@@ -27,33 +27,33 @@ export class Game {
   duration: number;
   recordingURL: string;
   teams: Team[];
-  tournamentMatches: TournamentMatch[];
+  tournamentGames: TournamentGame[];
 
   constructor(
-    id: number,
-    teamCount: number,
-    playerCount: number,
-    gameName: string,
-    mapName: string,
-    gametype: Gametype,
-    difficulty: Difficulty,
-    timeLimit: number,
-    planningTimeLimit: number,
-    cooperative: boolean,
-    allowTeams: boolean,
-    allowUnitTrading: boolean,
-    allowVeterans: boolean,
-    allowAlliances: boolean,
-    overheadMap: boolean,
-    deathmatch: boolean,
-    vTFL: boolean,
-    antiClump: boolean,
-    endDateTime: string,
-    startDateTime: string,
-    duration: number,
-    recordingURL: string,
-    teams: Team[],
-    tournamentMatches: TournamentMatch[],
+    id?: number,
+    teamCount?: number,
+    playerCount?: number,
+    gameName?: string,
+    mapName?: string,
+    gametype?: Gametype,
+    difficulty?: Difficulty,
+    timeLimit?: number,
+    planningTimeLimit?: number,
+    cooperative?: boolean,
+    allowTeams?: boolean,
+    allowUnitTrading?: boolean,
+    allowVeterans?: boolean,
+    allowAlliances?: boolean,
+    overheadMap?: boolean,
+    deathmatch?: boolean,
+    vTFL?: boolean,
+    antiClump?: boolean,
+    endDateTime?: string,
+    startDateTime?: string,
+    duration?: number,
+    recordingURL?: string,
+    teams?: Team[],
+    tournamentGames?: TournamentGame[],
   ) {
     this.id = id;
     this.teamCount = teamCount;
@@ -78,6 +78,6 @@ export class Game {
     this.duration = duration;
     this.recordingURL = recordingURL;
     this.teams = teams;
-    this.tournamentMatches = tournamentMatches;
+    this.tournamentGames = tournamentGames;
   }
 }
