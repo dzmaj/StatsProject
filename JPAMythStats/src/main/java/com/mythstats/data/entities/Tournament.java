@@ -31,7 +31,7 @@ public class Tournament {
 	@OneToMany(mappedBy = "tournament")
 	private List<TournamentMatch> tournamentMatches;
 	
-	@JsonIgnoreProperties({"tournaments", "metaserverUsers"})
+	@JsonIgnoreProperties({"tournaments", "metaserverUsers", "tournamentTeams"})
 	@ManyToOne
 	@JoinColumn(name="site_user_id")
 	private SiteUser owner;

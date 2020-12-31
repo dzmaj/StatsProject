@@ -16,6 +16,8 @@
 	<class>com.mythstats.data.entities.SiteUser</class>
 	<class>com.mythstats.data.entities.Team</class>
 	<class>com.mythstats.data.entities.Tournament</class>
+	<class>com.mythstats.data.entities.TournamentGame</class>
+	<class>com.mythstats.data.entities.TournamentGameScore</class>
 	<class>com.mythstats.data.entities.TournamentMatch</class>
 	<class>com.mythstats.data.entities.TournamentTeam</class>
 	<class>com.mythstats.data.entities.User</class>
@@ -26,8 +28,8 @@
       <property name="javax.persistence.jdbc.password" value="gamestatsuser" />
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
 
-      <property name="hibernate.show_sql" value="true" />
-      <property name="hibernate.format_sql" value="true" />
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="false" />
 
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
       <property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />

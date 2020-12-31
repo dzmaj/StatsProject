@@ -24,7 +24,7 @@ public class Team {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@JsonIgnoreProperties({"teams", "tournamentMatches"})
+	@JsonIgnoreProperties({"teams", "tournamentGames"})
 	@ManyToOne
 	@JoinColumn(name = "game_id")
 	private Game game;
