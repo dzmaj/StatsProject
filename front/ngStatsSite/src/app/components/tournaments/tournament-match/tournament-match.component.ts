@@ -10,6 +10,8 @@ export class TournamentMatchComponent implements OnInit {
 
   @Input() tournamentMatch: TournamentMatch;
 
+  columnsToDisplay = ['name', 'game'];
+
   constructor() { }
 
   ngOnInit(): void {

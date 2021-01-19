@@ -28,7 +28,7 @@ public class TournamentGame {
 	@JoinColumn(name="tournament_match_id")
 	private TournamentMatch tournamentMatch;
 	
-	@JsonIgnoreProperties({"tournamentGames", "teams"})
+	@JsonIgnoreProperties({"tournamentGames"})
 	@ManyToOne
 	@JoinColumn(name="game_id")
 	private Game game;

@@ -39,7 +39,10 @@ export class TournamentMainComponent implements OnInit {
 
   load(): void {
     this.tournamentService.show(this.tournamentId).subscribe(
-      data => this.tournament = data,
+      data => {
+        this.tournament = data;
+        console.log(data);
+      },
       err => console.error(err)
     )
   }

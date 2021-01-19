@@ -6,6 +6,24 @@
     {{tournamentMatch.description}}
   </mat-card-subtitle>
   <mat-card-content>
+    <table mat-table [dataSource]="tournamentMatch.tournamentGames" class="table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let tournamentGame"> {{tournamentGame.game.gametype.name + ' on ' + tournamentGame.game.mapName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="game">
+        <th mat-header-cell *matHeaderCellDef> Game </th>
+        <td mat-cell *matCellDef="let tournamentGame"><a [routerLink]="['/games/' + tournamentGame.game.id]">Game Page</a></td>
+      </ng-container>
+
+      <thead>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      </thead>
+      <tbody>
+        <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+      </tbody>
+
+    </table>
     <!-- <mat-list>
       <mat-list-item *ngFor="let game of tournamentMatch.tournamentGames">
         <p matLine>
